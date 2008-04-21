@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
-	
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="800" 
+	creationComplete="doTest()" xmlns:control="com.effectiveui.control.*">
+	<control:TracUIController id="controller"/>
+	<mx:Script>
+		<![CDATA[
+			import com.effectiveui.event.GetTicketsEvent;
+			import com.effectiveui.model.TracModel;			
+			
+			[Bindable]
+			private var model:TracModel = TracModel.getInstance();
+			
+			private function doTest():void{
+				model.username = "gowen";
+				model.password = "ghoti1784";
+				model.serverURL = "effectiveui-trac.cvsdude.com/ebay_Desktop";
+				
+				var getTickets:GetTicketsEvent = new GetTicketsEvent();
+				getTickets.dispatch();
+			}
+		]]>
+	</mx:Script>
+	<mx:DataGrid dataProvider="{model.tickets}" height="100%" width="100%">
+		<mx:columns>
+			<mx:DataGridColumn dataField="summary" width="200"/>
+			<mx:DataGridColumn dataField="status" width="50"/>
+		</mx:columns>
+	</mx:DataGrid>
 </mx:WindowedApplication>

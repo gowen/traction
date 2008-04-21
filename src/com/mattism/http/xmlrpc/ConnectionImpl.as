@@ -5,9 +5,6 @@
 *
 * @author   Daniel Mclaren (http://danielmclaren.net)
 * @note     Updated to Actionscript 3.0
-* 
-* @author 	Greg Owen
-* @note  	Adds callMethod function that takes a pre-made MethodCall object
 */
 
 package com.mattism.http.xmlrpc
@@ -81,24 +78,6 @@ package com.mattism.http.xmlrpc
 				var request:URLRequest = new URLRequest();
 				request.contentType = 'text/xml';
 				request.data = this._method.getXml();
-				request.method = URLRequestMethod.POST;
-				request.url = this.getUrl();
-				
-				this._response.load(request);
-			}
-		}
-		
-		public function callMethod(method:MethodCall):void{
-			if ( !this.getUrl() ){
-				trace(ERROR_NO_URL);
-				throw Error(ERROR_NO_URL);
-			}
-			else {		
-				this.debug( "Call -> " + method+"() -> " + this.getUrl());
-												
-				var request:URLRequest = new URLRequest();
-				request.contentType = 'text/xml';
-				request.data = method.getXml();
 				request.method = URLRequestMethod.POST;
 				request.url = this.getUrl();
 				

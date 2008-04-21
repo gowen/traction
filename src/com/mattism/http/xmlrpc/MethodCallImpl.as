@@ -5,13 +5,16 @@
 *
 * @author   Daniel Mclaren (http://danielmclaren.net)
 * @note     Updated to Actionscript 3.0
+* 
+* @author 	Greg Owen
+* @note		Adds logic to struct handling to properly encode Arrays that are members of the struct. 
+* 			Requires the array's elements to be in {type: x, value:y} format  
 */
 
 package com.mattism.http.xmlrpc
 {
-	import com.mattism.http.xmlrpc.util.XMLRPCUtils;
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
-	import com.mattism.http.xmlrpc.MethodCall;
+	import com.mattism.http.xmlrpc.util.XMLRPCUtils;
 	
 	public class MethodCallImpl
 	implements MethodCall
@@ -141,7 +144,13 @@ package com.mattism.http.xmlrpc
 						MemberNode.appendChild(<name>{x}</name>);
 	
 						// add value node
-						MemberNode.appendChild(<value>{parameter.value[x]}</value>);
+						if(parameter.value[x] is Array){
+							var valueNode:XML = <value />;
+							valueNode.appendChild(this.createParamsNode(parameter.value[x]));
+							MemberNode.appendChild(valueNode);
+						} else {
+							MemberNode.appendChild(<value>{parameter.value[x]}</value>);
+						}
 						
 						TypeNode.appendChild(MemberNode);
 					}
