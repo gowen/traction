@@ -7,24 +7,24 @@ package com.effectiveui.command
 	
 	import flash.events.Event;
 
-	public class GetMilestonesCommand implements Command
+	public class GetPrioritiesCommand implements Command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;
-
+		
 		public function execute(event:CairngormEvent):void
 		{
 			conn = new ConnectionImpl(model.getURL());
-			conn.addEventListener(Event.COMPLETE, handleMilestoneReturn);
-			conn.call("ticket.milestone.getAll");			
+			conn.addEventListener(Event.COMPLETE, handlePrioritiesReturn);
+			conn.call("ticket.priority.getAll");
 		}
 		
-		protected function handleMilestoneReturn(event:Event):void{
-			model.components.removeAll();
-			model.milestones.addItemAt(model.NO_VALUE, 0);
-			var milestones:Array = (conn.getResponse() as Array);
-			for each(var milestone:String in milestones){
-				model.milestones.addItem(milestone);
+		protected function handlePrioritiesReturn(event:Event):void{
+			model.priorities.removeAll();
+			model.priorities.addItemAt(model.NO_VALUE, 0);
+			var priorities:Array = conn.getResponse() as Array;
+			for each(var priority:String in priorities){
+				model.priorities.addItem(priority);
 			}			
 		}
 		

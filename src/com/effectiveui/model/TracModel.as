@@ -28,12 +28,18 @@ package com.effectiveui.model
 		public var username:String;
 		public var password:String;
 		public var serverURL:String;
-		public var tickets:ArrayCollection = new ArrayCollection;
-		public var milestones:ArrayCollection = new ArrayCollection;
-		public var components:ArrayCollection = new ArrayCollection;
-		public var statuses:ArrayCollection = new ArrayCollection;
-		public var versions:ArrayCollection = new ArrayCollection;
-		public var priorities:ArrayCollection = new ArrayCollection;
-		public var resolutions:ArrayCollection = new ArrayCollection;
+		public var tickets:ArrayCollection = new ArrayCollection();
+		public var milestones:ArrayCollection = new ArrayCollection();
+		public var components:ArrayCollection = new ArrayCollection();
+		public var statuses:ArrayCollection = new ArrayCollection();
+		public var versions:ArrayCollection = new ArrayCollection();
+		public var priorities:ArrayCollection = new ArrayCollection();
+		public var resolutions:ArrayCollection = new ArrayCollection();
+		public var types:ArrayCollection = new ArrayCollection();
+		public var ticketsLoaded:Boolean = false;
+		
+		public const NO_VALUE:String = "";
 	}
+	
+	
 }

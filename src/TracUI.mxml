@@ -1,29 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="800" 
-	creationComplete="doTest()" xmlns:control="com.effectiveui.control.*">
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="1200" 
+	creationComplete="launchLogin()" xmlns:control="com.effectiveui.control.*">
 	<control:TracUIController id="controller"/>
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.event.UpdateTicketEvent;
+			import com.effectiveui.view.window.LoginWindow;
 			import com.effectiveui.event.GetTicketsEvent;
 			import com.effectiveui.model.TracModel;			
 			
 			[Bindable]
-			private var model:TracModel = TracModel.getInstance();
+			private var model:TracModel = TracModel.getInstance();						
 			
-			private function doTest():void{
-				model.username = "gowen";
-				model.password = "ghoti1784";
-				model.serverURL = "effectiveui-trac.cvsdude.com/ebay_Desktop";
-				
-				var getTickets:GetTicketsEvent = new GetTicketsEvent();
-				getTickets.dispatch();
+			protected function launchLogin():void{
+				var login:LoginWindow = new LoginWindow();
+				login.open();
+				login.alwaysInFront = true;
+				model.tickets.filterFunction = evalFilters;				
+			}
+			
+			protected function evalFilters(data:Object):Boolean{				
+				if(textFilter.text && textFilter.text.length > 0){
+					var filterWords:Array = textFilter.text.toLowerCase().split(" ");
+					var summaryCount:int = 0;
+					var descCount:int = 0;
+					var summary:String = (data.summary as String).toLowerCase();
+					var desc:String = (data.description as String).toLowerCase();
+					for each(var word:String in filterWords){
+						if(summary.indexOf(word) != -1){
+							summaryCount++;
+						}
+						if(desc.indexOf(word) != -1){
+							descCount++;
+						}
+					}					
+					if((summaryCount <= 0 || (summaryCount/filterWords.length)*10 < 7) && (descCount <= 0 || (descCount/filterWords.length)*10 < 7)){
+						return false;
+					}
+				}
+				if(statusBox.selectedIndex != 0 && statusBox.selectedItem){
+					if(data.status.toString() != statusBox.selectedItem.toString()){
+						return false;
+					}
+				}
+				if(versionBox.selectedIndex != 0 && versionBox.selectedItem){
+					if(data.version.toString() != versionBox.selectedItem.toString()){
+						return false;
+					}
+				}
+				if(milestoneBox.selectedIndex != 0 && milestoneBox.selectedItem){
+					if(data.milestone.toString() != milestoneBox.selectedItem.toString()){
+						return false;
+					}
+				}
+				if(keywordFilter.text && keywordFilter.text.length > 0){
+					var keywords:Array = keywordFilter.text.split(" ");
+					var keywordData:String = (data.keywords as String).toLowerCase();
+					for each(var word:String in keywords){
+						if(keywordData.indexOf(word) == -1){
+							return false;
+						}
+					}
+				}
+				if(componentBox.selectedIndex != 0 && componentBox.selectedItem){
+					if(data.component.toString() != componentBox.selectedItem.toString()){
+						return false;
+					}
+				}
+				if(priorityBox.selectedIndex != 0 && priorityBox.selectedItem){
+					if(data.priority.toString() != priorityBox.selectedItem.toString()){
+						return false;
+					}
+				}
+				if(resolutionBox.selectedIndex != 0 && resolutionBox.selectedItem){
+					if(data.resolution.toString() != resolutionBox.selectedItem.toString()){
+						return false;
+					}
+				}
+				if(typeBox.selectedIndex != 0 && typeBox.selectedItem){
+					if(data.type.toString() != typeBox.selectedItem.toString()){
+						return false;
+					}
+				}
+				return true;
+			}
+			
+			protected var editedItem:Object;
+			protected function updateDescription():void{
+				if(editedItem){					
+					editedItem.description = description.text
+					new UpdateTicketEvent(editedItem).dispatch();
+					editedItem = null;
+				}
 			}
 		]]>
 	</mx:Script>
-	<mx:DataGrid dataProvider="{model.tickets}" height="100%" width="100%">
+	<mx:VBox id="filterList" width="250" height="100%" left="10">
+		<mx:Text text="Filters" fontWeight="bold" horizontalCenter="0"/>
+		<mx:Spacer height="3"/>
+		<mx:Text text="Summary/Description: "/>
+		<mx:TextInput id="textFilter" change="model.tickets.refresh()" width="90%"/>
+		<mx:Spacer height="3"/>
+		<mx:Text text="Status:"/>
+		<mx:ComboBox id="statusBox" dataProvider="{model.statuses}" change="model.tickets.refresh()" dataChange="statusBox.selectedIndex = 0"/>
+		<mx:Spacer height="3"/>
+		<mx:Text text="Version:"/>
+		<mx:ComboBox id="versionBox" dataProvider="{model.versions}" change="model.tickets.refresh()" dataChange="versionBox.selectedIndex = 0"/>
+		<mx:Spacer height="3"/>
+		<mx:Text text="Milestone:"/>
+		<mx:ComboBox id="milestoneBox" dataProvider="{model.milestones}" change="model.tickets.refresh()" dataChange="milestoneBox.selectedIndex = 0"/>
+		<mx:Spacer height="3"/>
+		<mx:Text text="Keywords:"/>
+		<mx:TextInput id="keywordFilter" change="model.tickets.refresh()" width="90%"/>		
+		<mx:Spacer height="3"/>
+		<mx:Text text="Component:"/>
+		<mx:ComboBox id="componentBox" dataProvider="{model.components}" change="model.tickets.refresh()" dataChange="componentBox.selectedIndex = 0"/>
+		<mx:Spacer height="3"/>
+		<mx:Text text="Priority:"/>
+		<mx:ComboBox id="priorityBox" dataProvider="{model.priorities}" change="model.tickets.refresh()" dataChange="priorityBox.selectedIndex = 0"/>
+		<mx:Spacer height="3"/>
+		<mx:Text text="Type:"/>
+		<mx:ComboBox id="typeBox" dataProvider="{model.types}" change="model.tickets.refresh()" dataChange="typeBox.selectedIndex = 0"/>
+		<mx:Spacer height="3"/>
+		<mx:Text text="Resolution:"/>
+		<mx:ComboBox id="resolutionBox" dataProvider="{model.resolutions}" change="model.tickets.refresh()" dataChange="resolutionBox.selectedIndex = 0"/>		
+	</mx:VBox>
+	<mx:VDividedBox height="100%" width="{width - filterList.width}" right="0">
+		<mx:DataGrid id="ticketGrid" dataProvider="{model.tickets}" height="60%" width="100%" itemClick="description.text = event.target.selectedItem.description" editable="true">
 		<mx:columns>
-			<mx:DataGridColumn dataField="summary" width="200"/>
-			<mx:DataGridColumn dataField="status" width="50"/>
+			<mx:DataGridColumn dataField="summary" minWidth="300" itemEditor="com.effectiveui.view.editors.SummaryEditor"/>
+			<mx:DataGridColumn dataField="status" minWidth="50" itemEditor="com.effectiveui.view.editors.StatusEditor"/>
+			<mx:DataGridColumn dataField="version" minWidth="70" itemEditor="com.effectiveui.view.editors.VersionEditor"/>			
+			<mx:DataGridColumn dataField="milestone" minWidth="50" itemEditor="com.effectiveui.view.editors.MilestoneEditor"/>
+			<mx:DataGridColumn dataField="owner" minWidth="50"/>
+			<mx:DataGridColumn dataField="keywords" minWidth="100" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
+			<mx:DataGridColumn dataField="component" minWidth="70" itemEditor="com.effectiveui.view.editors.ComponentEditor"/>												
+			<mx:DataGridColumn dataField="priority" minWidth="50" itemEditor="com.effectiveui.view.editors.PriorityEditor"/>
+			<mx:DataGridColumn dataField="type" minWidth="80" itemEditor="com.effectiveui.view.editors.TypeEditor"/>
+			<mx:DataGridColumn dataField="resolution" minWidth="50" itemEditor="com.effectiveui.view.editors.ResolutionEditor"/>			
 		</mx:columns>
 	</mx:DataGrid>
+	<mx:TextArea id="description" height="40%" width="100%" change="editedItem = ticketGrid.selectedItem" focusOut="updateDescription()"/>
+	</mx:VDividedBox>
+	<mx:Canvas height="100%" width="{width - filterList.width}" right="0" visible="{!model.ticketsLoaded}" backgroundColor="0xFFFFFF">
+		<mx:Text text="Loading..." horizontalCenter="0" verticalCenter="0" fontSize="21" fontWeight="bold"/>
+	</mx:Canvas>
 </mx:WindowedApplication>

@@ -7,25 +7,25 @@ package com.effectiveui.command
 	
 	import flash.events.Event;
 
-	public class GetMilestonesCommand implements Command
+	public class GetVersionsCommand implements Command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;
-
+		
 		public function execute(event:CairngormEvent):void
 		{
 			conn = new ConnectionImpl(model.getURL());
-			conn.addEventListener(Event.COMPLETE, handleMilestoneReturn);
-			conn.call("ticket.milestone.getAll");			
+			conn.addEventListener(Event.COMPLETE, handleVersionsReturn);
+			conn.call("ticket.version.getAll");
 		}
 		
-		protected function handleMilestoneReturn(event:Event):void{
-			model.components.removeAll();
-			model.milestones.addItemAt(model.NO_VALUE, 0);
-			var milestones:Array = (conn.getResponse() as Array);
-			for each(var milestone:String in milestones){
-				model.milestones.addItem(milestone);
-			}			
+		protected function handleVersionsReturn(event:Event):void{
+			model.versions.removeAll();
+			model.versions.addItemAt(model.NO_VALUE, 0);
+			var versions:Array = conn.getResponse() as Array;
+			for each(var version:String in versions){
+				model.versions.addItem(version);
+			}						
 		}
 		
 	}

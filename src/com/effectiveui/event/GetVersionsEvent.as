@@ -4,7 +4,7 @@ package com.effectiveui.event
 	
 	public class GetVersionsEvent extends CairngormEvent
 	{
-		public const GET_VERSIONS:String = "getversions";
+		public static const GET_VERSIONS:String = "getversions";
 		
 		public function GetVersionsEvent()
 		{

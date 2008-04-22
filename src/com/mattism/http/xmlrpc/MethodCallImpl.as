@@ -138,21 +138,23 @@ package com.mattism.http.xmlrpc
 					this.debug("CreateParameterNode(): >> Begin struct");
 					TypeNode = <struct />;
 					for (var x:String in parameter.value) {
-						var MemberNode:XML = <member />;
-	
-						// add name node
-						MemberNode.appendChild(<name>{x}</name>);
-	
-						// add value node
-						if(parameter.value[x] is Array){
-							var valueNode:XML = <value />;
-							valueNode.appendChild(this.createParamsNode(parameter.value[x]));
-							MemberNode.appendChild(valueNode);
-						} else {
-							MemberNode.appendChild(<value>{parameter.value[x]}</value>);
+						if(x != "mx_internal_uid"){
+							var MemberNode:XML = <member />;
+		
+							// add name node
+							MemberNode.appendChild(<name>{x}</name>);
+		
+							// add value node
+							if(parameter.value[x] is Array){
+								var valueNode:XML = <value />;
+								valueNode.appendChild(this.createParamsNode(parameter.value[x]));
+								MemberNode.appendChild(valueNode);
+							} else {
+								MemberNode.appendChild(<value>{parameter.value[x]}</value>);
+							}
+							
+							TypeNode.appendChild(MemberNode);
 						}
-						
-						TypeNode.appendChild(MemberNode);
 					}
 					this.debug("CreateParameterNode(): << End struct");
 					Node.appendChild(TypeNode);
