@@ -8,7 +8,10 @@
 			import com.effectiveui.model.TracModel;
 			protected function updateTicket():void{
 				if(this.selectedItem != data.status){
-					data.status = this.selectedItem;	
+					data.status = this.selectedItem;
+					if(data.status != "closed"){
+						data.resolution = "";
+					}	
 					new UpdateTicketEvent(data).dispatch();
 				}
 			}

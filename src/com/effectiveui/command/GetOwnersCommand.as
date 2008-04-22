@@ -20,6 +20,8 @@ package com.effectiveui.command
 		}
 		
 		protected function handleOwnersReturn(event:Event):void{
+			model.owners.removeAll();
+			model.owners.addItem(model.NO_VALUE);
 			var owners:Array = (conn.getResponse() as String).split("\r\n");
 			for each(var owner:String in owners){
 				model.owners.addItem(owner);

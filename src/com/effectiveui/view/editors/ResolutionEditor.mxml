@@ -9,6 +9,11 @@
 			protected function updateTicket():void{
 				if(this.selectedItem != data.resolution){
 					data.resolution = this.selectedItem;
+					if(selectedIndex != 0){
+						data.status = "closed";
+					} else {
+						data.status = "reopened";
+					}					
 					new UpdateTicketEvent(data).dispatch();
 				}
 			}

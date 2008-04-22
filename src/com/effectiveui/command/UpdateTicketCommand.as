@@ -11,7 +11,7 @@ package com.effectiveui.command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		public function execute(event:CairngormEvent):void
-		{
+		{			
 			var ticket:Object = (event as UpdateTicketEvent).ticket;
 			if(ticket.component == model.NO_VALUE){
 				ticket.component = "";
@@ -34,6 +34,9 @@ package com.effectiveui.command
 			if(ticket.priority == model.NO_VALUE){
 				ticket.priority = "";
 			}
+			
+			model.tickets.refresh();
+			
 			var conn:ConnectionImpl = new ConnectionImpl(TracModel.getInstance().getURL());			
 			var comment:String = " ";
 			conn.addParam(ticket.id, XMLRPCDataTypes.INT);
