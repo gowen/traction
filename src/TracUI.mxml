@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="1200" 
-	creationComplete="launchLogin()" xmlns:control="com.effectiveui.control.*">
+	creationComplete="launchLogin()" xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0">
 	<control:TracUIController id="controller"/>
 	<mx:Script>
 		<![CDATA[

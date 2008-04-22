@@ -9,20 +9,13 @@
 
 package com.mattism.http.xmlrpc
 {
-	import flash.events.Event;
 	import flash.events.ErrorEvent;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
-	
-	import com.mattism.http.xmlrpc.Connection;
-	import com.mattism.http.xmlrpc.MethodCall;
-	import com.mattism.http.xmlrpc.MethodCallImpl;
-	import com.mattism.http.xmlrpc.MethodFault;
-	import com.mattism.http.xmlrpc.MethodFaultImpl;
-	import com.mattism.http.xmlrpc.Parser;
-	import com.mattism.http.xmlrpc.ParserImpl;
 	
 	public class ConnectionImpl
 	extends EventDispatcher
@@ -56,11 +49,17 @@ package com.mattism.http.xmlrpc
 			//init response
 			this._response = new URLLoader();
 			this._response.addEventListener(Event.COMPLETE, this._onLoad);
+			this._response.addEventListener(IOErrorEvent.IO_ERROR, handleIOError);
 	
 			if (url){
 				this.setUrl( url );
 			}
 			
+		}
+		
+		private function handleIOError(event:Event):void{
+			event.stopImmediatePropagation();
+			dispatchEvent(new ErrorEvent(IOErrorEvent.IO_ERROR));
 		}
 		
 		public function call( method:String ):void { this._call( method ); }
@@ -80,8 +79,8 @@ package com.mattism.http.xmlrpc
 				request.data = this._method.getXml();
 				request.method = URLRequestMethod.POST;
 				request.url = this.getUrl();
-				
-				this._response.load(request);
+				request.authenticate = false;
+				this._response.load(request);				
 			}
 		}
 	
