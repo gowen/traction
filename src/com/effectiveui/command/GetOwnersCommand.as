@@ -13,7 +13,7 @@ package com.effectiveui.command
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;
 		public function execute(event:CairngormEvent):void{		
-			conn = new ConnectionImpl(model.getURL());
+			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
 			conn.addParam("CurrentUsers", XMLRPCDataTypes.STRING);
 			conn.addEventListener(Event.COMPLETE, handleOwnersReturn);
 			conn.call("wiki.getPage");

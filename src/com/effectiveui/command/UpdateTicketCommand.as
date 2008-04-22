@@ -37,7 +37,7 @@ package com.effectiveui.command
 			
 			model.tickets.refresh();
 			
-			var conn:ConnectionImpl = new ConnectionImpl(TracModel.getInstance().getURL());			
+			var conn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);			
 			var comment:String = " ";
 			conn.addParam(ticket.id, XMLRPCDataTypes.INT);
 			conn.addParam(comment, XMLRPCDataTypes.STRING);

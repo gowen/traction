@@ -14,7 +14,7 @@ package com.effectiveui.command
 		
 		public function execute(event:CairngormEvent):void
 		{
-			conn = new ConnectionImpl(model.getURL());
+			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
 			conn.addEventListener(Event.COMPLETE, handleResolutionsReturn);
 			conn.call("ticket.resolution.getAll");
 		}

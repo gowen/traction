@@ -15,7 +15,10 @@ package com.mattism.http.xmlrpc
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.net.URLRequestHeader;
 	import flash.net.URLRequestMethod;
+	
+	import mx.utils.Base64Encoder;
 	
 	public class ConnectionImpl
 	extends EventDispatcher
@@ -33,10 +36,12 @@ package com.mattism.http.xmlrpc
 		private var _parser:Parser;
 		private var _response:URLLoader;
 		private var _parsed_response:Object;
+		private var _username:String;
+		private var _password:String;
 		
 		private var _fault:MethodFault;
 		
-		public function ConnectionImpl( url:String ) {
+		public function ConnectionImpl( url:String, user:String=null, pass:String=null) {
 			//prepare method response handler
 			//this.ignoreWhite = true;
 			
@@ -53,6 +58,12 @@ package com.mattism.http.xmlrpc
 	
 			if (url){
 				this.setUrl( url );
+			}
+			if(user){
+				this._username = user;
+			}
+			if(pass){
+				this._password = pass;
 			}
 			
 		}
@@ -79,7 +90,13 @@ package com.mattism.http.xmlrpc
 				request.data = this._method.getXml();
 				request.method = URLRequestMethod.POST;
 				request.url = this.getUrl();
-				request.authenticate = false;
+				if(_username && _password){
+					var authData:Base64Encoder = new Base64Encoder();
+					authData.encode(_username + ':' + _password);
+					var authHeader:URLRequestHeader = new URLRequestHeader("Authorization", "Basic " + authData.toString());
+					request.requestHeaders.push(authHeader);
+				}
+				
 				this._response.load(request);				
 			}
 		}

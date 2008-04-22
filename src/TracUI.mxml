@@ -15,7 +15,7 @@
 			protected function launchLogin():void{
 				var login:LoginWindow = new LoginWindow();
 				login.open();
-				login.alwaysInFront = true;
+				login.orderToFront();
 				model.tickets.filterFunction = evalFilters;				
 			}
 			

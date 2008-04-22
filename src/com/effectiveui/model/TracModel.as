@@ -21,10 +21,6 @@ package com.effectiveui.model
 			}			
 		}
 		
-		public function getURL():String{
-			return "https://" + username + ":" + password + "@" + serverURL + "/login/xmlrpc";
-		}
-		
 		public var username:String;
 		public var password:String;
 		public var serverURL:String;

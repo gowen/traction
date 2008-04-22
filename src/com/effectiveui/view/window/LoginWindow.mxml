@@ -52,8 +52,8 @@
 				trace("attempting to login");
 				model.username = uname.text;
 				model.password = pass.text;
-				model.serverURL = serverURL.text.replace("https://", "");				
-				var conn:ConnectionImpl = new ConnectionImpl(model.getURL());	
+				model.serverURL = serverURL.text + "/login/xmlrpc";				
+				var conn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);	
 				conn.addEventListener(Event.COMPLETE, handleLogin);		
 				conn.addEventListener(IOErrorEvent.IO_ERROR, handleLoginFailed);
 				conn.call("system.listMethods");												

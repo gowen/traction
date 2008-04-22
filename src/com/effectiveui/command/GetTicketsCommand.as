@@ -16,7 +16,7 @@ package com.effectiveui.command
 		public function execute(event:CairngormEvent):void
 		{
 			//first we need to get the list of tickets for this user
-			conn = new ConnectionImpl(model.getURL());
+			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
 			conn.addParam("owner=" + model.username +"&status!=closed", XMLRPCDataTypes.STRING);
 			conn.addEventListener(Event.COMPLETE, handleTicketList);
 			conn.call("ticket.query");
@@ -35,7 +35,7 @@ package com.effectiveui.command
 				ticketRequestArray.push(request);
 				
 				if(ticketRequestArray.length > 50 || i == ticketList.length - 1){
-					var tempConn:ConnectionImpl = new ConnectionImpl(model.getURL());
+					var tempConn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);
 					tempConn.addParam(ticketRequestArray, XMLRPCDataTypes.ARRAY);
 					tempConn.addEventListener(Event.COMPLETE, handleTicketsReturn);
 					tempConn.call("system.multicall");
