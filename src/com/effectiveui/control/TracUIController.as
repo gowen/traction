@@ -3,6 +3,7 @@ package com.effectiveui.control
 	import com.adobe.cairngorm.control.FrontController;
 	import com.effectiveui.command.GetComponentsCommand;
 	import com.effectiveui.command.GetMilestonesCommand;
+	import com.effectiveui.command.GetOwnersCommand;
 	import com.effectiveui.command.GetPrioritiesCommand;
 	import com.effectiveui.command.GetResolutionsCommand;
 	import com.effectiveui.command.GetStatusesCommand;
@@ -12,6 +13,7 @@ package com.effectiveui.control
 	import com.effectiveui.command.UpdateTicketCommand;
 	import com.effectiveui.event.GetComponentsEvent;
 	import com.effectiveui.event.GetMilestonesEvent;
+	import com.effectiveui.event.GetOwnersEvent;
 	import com.effectiveui.event.GetPrioritiesEvent;
 	import com.effectiveui.event.GetResolutionsEvent;
 	import com.effectiveui.event.GetStatusesEvent;
@@ -37,6 +39,7 @@ package com.effectiveui.control
 			addCommand(GetTicketsEvent.GET_TICKETS, GetTicketsCommand);
 			addCommand(GetVersionsEvent.GET_VERSIONS, GetVersionsCommand);
 			addCommand(GetTypesEvent.GET_TYPES, GetTypesCommand);
+			addCommand(GetOwnersEvent.GET_OWNERS, GetOwnersCommand);
 			addCommand(UpdateTicketEvent.UPDATE_TICKET, UpdateTicketCommand);			
 		}
 		

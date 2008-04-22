@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	dataProvider="{TracModel.getInstance().owners}"
+	change="updateTicket()">
+	<mx:Script>
+		<![CDATA[
+			import com.effectiveui.event.UpdateTicketEvent;
+			import com.effectiveui.model.TracModel;
+			protected function updateTicket():void{
+				if(this.selectedItem != data.owner){
+					data.owner = this.selectedItem;
+					new UpdateTicketEvent(data).dispatch();
+				}
+			}
+		]]>
+	</mx:Script>
+	
+</mx:ComboBox>

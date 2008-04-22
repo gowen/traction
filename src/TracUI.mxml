@@ -132,7 +132,7 @@
 			<mx:DataGridColumn dataField="status" minWidth="50" itemEditor="com.effectiveui.view.editors.StatusEditor"/>
 			<mx:DataGridColumn dataField="version" minWidth="70" itemEditor="com.effectiveui.view.editors.VersionEditor"/>			
 			<mx:DataGridColumn dataField="milestone" minWidth="50" itemEditor="com.effectiveui.view.editors.MilestoneEditor"/>
-			<mx:DataGridColumn dataField="owner" minWidth="50"/>
+			<mx:DataGridColumn dataField="owner" minWidth="50" itemEditor="com.effectiveui.view.editors.OwnerEditor"/>
 			<mx:DataGridColumn dataField="keywords" minWidth="100" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
 			<mx:DataGridColumn dataField="component" minWidth="70" itemEditor="com.effectiveui.view.editors.ComponentEditor"/>												
 			<mx:DataGridColumn dataField="priority" minWidth="50" itemEditor="com.effectiveui.view.editors.PriorityEditor"/>

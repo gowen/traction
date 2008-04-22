@@ -13,6 +13,7 @@
 	<mx:Button label="Submit" click="login()" bottom="30" horizontalCenter="0"/>
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.event.GetOwnersEvent;
 			import com.effectiveui.event.GetTypesEvent;
 			import com.effectiveui.event.GetVersionsEvent;
 			import com.effectiveui.event.GetStatusesEvent;
@@ -43,6 +44,7 @@
 				new GetStatusesEvent().dispatch();
 				new GetVersionsEvent().dispatch();
 				new GetTypesEvent().dispatch();
+				new GetOwnersEvent().dispatch();
 				
 				removeEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
 				close();

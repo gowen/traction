@@ -36,6 +36,7 @@ package com.effectiveui.model
 		public var priorities:ArrayCollection = new ArrayCollection();
 		public var resolutions:ArrayCollection = new ArrayCollection();
 		public var types:ArrayCollection = new ArrayCollection();
+		public var owners:ArrayCollection = new ArrayCollection();
 		public var ticketsLoaded:Boolean = false;
 		
 		public const NO_VALUE:String = "";
