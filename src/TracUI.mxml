@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="1200"
-	creationComplete="launchLogin()" xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0">
+	creationComplete="launchLogin()" xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0" xmlns:component="com.effectiveui.component.*">
 	<control:TracUIController id="controller"/>
 	<mx:Script>
 		<![CDATA[
@@ -126,22 +126,23 @@
 		<mx:ComboBox id="resolutionBox" dataProvider="{model.resolutions}" change="model.tickets.refresh()" dataChange="resolutionBox.selectedIndex = 0"/>		
 	</mx:VBox>
 	<mx:VDividedBox height="100%" width="{width - filterList.width}" right="0">
-		<mx:DataGrid id="ticketGrid" dataProvider="{model.tickets}" height="60%" width="100%" itemFocusIn="description.text = event.target.selectedItem.description" editable="true">
-		<mx:columns>
-			<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor"/>
-			<mx:DataGridColumn dataField="status" minWidth="50" itemEditor="com.effectiveui.view.editors.StatusEditor"/>
-			<mx:DataGridColumn dataField="version" minWidth="70" itemEditor="com.effectiveui.view.editors.VersionEditor"/>			
-			<mx:DataGridColumn dataField="milestone" minWidth="30" itemEditor="com.effectiveui.view.editors.MilestoneEditor"/>
-			<mx:DataGridColumn dataField="owner" minWidth="50" itemEditor="com.effectiveui.view.editors.OwnerEditor"/>
-			<mx:DataGridColumn dataField="reporter" editable="false" minWidth="70"/>
-			<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
-			<mx:DataGridColumn dataField="component" minWidth="70" itemEditor="com.effectiveui.view.editors.ComponentEditor"/>												
-			<mx:DataGridColumn dataField="priority" minWidth="50" itemEditor="com.effectiveui.view.editors.PriorityEditor"/>
-			<mx:DataGridColumn dataField="type" minWidth="80" itemEditor="com.effectiveui.view.editors.TypeEditor"/>
-			<mx:DataGridColumn dataField="resolution" minWidth="50" itemEditor="com.effectiveui.view.editors.ResolutionEditor"/>			
-		</mx:columns>
-	</mx:DataGrid>
-	<mx:TextArea id="description" height="40%" width="100%" change="editedItem = ticketGrid.selectedItem" focusOut="updateDescription()"/>
+		<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="60%" width="100%" 
+				itemFocusIn="description.text = event.target.selectedItem.description" editable="true">
+			<component:columns>
+				<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor"/>
+				<mx:DataGridColumn dataField="status" minWidth="50" itemEditor="com.effectiveui.view.editors.StatusEditor"/>
+				<mx:DataGridColumn dataField="version" minWidth="70" itemEditor="com.effectiveui.view.editors.VersionEditor"/>			
+				<mx:DataGridColumn dataField="milestone" minWidth="30" itemEditor="com.effectiveui.view.editors.MilestoneEditor"/>
+				<mx:DataGridColumn dataField="owner" minWidth="50" itemEditor="com.effectiveui.view.editors.OwnerEditor"/>
+				<mx:DataGridColumn dataField="reporter" minWidth="70" itemEditor="com.effectiveui.view.editors.ReporterEditor"/>
+				<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
+				<mx:DataGridColumn dataField="component" minWidth="70" itemEditor="com.effectiveui.view.editors.ComponentEditor"/>												
+				<mx:DataGridColumn dataField="priority" minWidth="50" itemEditor="com.effectiveui.view.editors.PriorityEditor"/>
+				<mx:DataGridColumn dataField="type" minWidth="80" itemEditor="com.effectiveui.view.editors.TypeEditor"/>
+				<mx:DataGridColumn dataField="resolution" minWidth="50" itemEditor="com.effectiveui.view.editors.ResolutionEditor"/>			
+			</component:columns>
+		</component:TracDataGrid>
+		<mx:TextArea id="description" height="40%" width="100%" change="editedItem = ticketGrid.selectedItem" focusOut="updateDescription()"/>
 	</mx:VDividedBox>
 	<mx:Canvas height="100%" width="{width - filterList.width}" right="0" visible="{!model.ticketsLoaded}" backgroundColor="0xFFFFFF">
 		<mx:Text text="Loading..." horizontalCenter="0" verticalCenter="0" fontSize="21" fontWeight="bold"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml" 
 	dataProvider="{TracModel.getInstance().priorities}"
-	change="updateTicket()">
+	change="updateTicket()" focusIn="this.open()">
 	<mx:Script>
 		<![CDATA[
 			import com.effectiveui.event.UpdateTicketEvent;
