@@ -61,8 +61,7 @@
 			
 			protected function handleLogin(event:Event):void{		
 				trace("logged in successfully");
-						
-				new GetTicketsEvent().dispatch();				
+														
 				new GetMilestonesEvent().dispatch();
 				new GetComponentsEvent().dispatch();
 				new GetPrioritiesEvent().dispatch();
@@ -71,6 +70,7 @@
 				new GetVersionsEvent().dispatch();
 				new GetTypesEvent().dispatch();
 				new GetOwnersEvent().dispatch();
+				new GetTicketsEvent().dispatch();
 				
 				if(store.selected){
 					storeLoginInfo();
