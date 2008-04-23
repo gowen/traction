@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="1200"
-	creationComplete="launchLogin()" xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0" xmlns:component="com.effectiveui.component.*">
+	creationComplete="launchLogin()" visible="false" 
+	xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0" 
+	xmlns:component="com.effectiveui.component.*" xmlns:util="com.effectiveui.util.*">
 	<control:TracUIController id="controller"/>
 	<mx:Script>
 		<![CDATA[
+			import mx.controls.ProgressBarMode;
 			import com.effectiveui.event.UpdateTicketEvent;
 			import com.effectiveui.view.window.LoginWindow;
 			import com.effectiveui.event.GetTicketsEvent;
@@ -16,7 +19,12 @@
 				var login:LoginWindow = new LoginWindow();
 				login.open();
 				login.orderToFront();
-				model.tickets.filterFunction = evalFilters;				
+				model.tickets.filterFunction = evalFilters;		
+				login.addEventListener(Event.CLOSING, handleLoginClosing);		
+			}
+			
+			protected function handleLoginClosing(event:Event):void{
+				this.visible = true;
 			}
 			
 			protected function evalFilters(data:Object):Boolean{				
@@ -93,6 +101,10 @@
 					editedItem = null;
 				}
 			}
+			
+			protected function updateTicketProgress():void{
+				ticketProgress.setProgress(model.numTicketsLoaded, model.ticketCount);
+			}
 		]]>
 	</mx:Script>
 	<mx:VBox id="filterList" width="250" height="100%" left="10">
@@ -127,24 +139,27 @@
 	</mx:VBox>
 	<mx:VDividedBox height="100%" width="{width - filterList.width}" right="0">
 		<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="60%" width="100%" 
-				itemFocusIn="description.text = event.target.selectedItem.description" editable="true">
+				itemFocusIn="description.text = event.target.selectedItem.description" editable="true" rowHeight="25">
 			<component:columns>
-				<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor"/>
-				<mx:DataGridColumn dataField="status" minWidth="50" itemEditor="com.effectiveui.view.editors.StatusEditor"/>
-				<mx:DataGridColumn dataField="version" minWidth="70" itemEditor="com.effectiveui.view.editors.VersionEditor"/>			
-				<mx:DataGridColumn dataField="milestone" minWidth="30" itemEditor="com.effectiveui.view.editors.MilestoneEditor"/>
-				<mx:DataGridColumn dataField="owner" minWidth="50" itemEditor="com.effectiveui.view.editors.OwnerEditor"/>
-				<mx:DataGridColumn dataField="reporter" minWidth="70" itemEditor="com.effectiveui.view.editors.ReporterEditor"/>
-				<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
-				<mx:DataGridColumn dataField="component" minWidth="70" itemEditor="com.effectiveui.view.editors.ComponentEditor"/>												
-				<mx:DataGridColumn dataField="priority" minWidth="50" itemEditor="com.effectiveui.view.editors.PriorityEditor"/>
-				<mx:DataGridColumn dataField="type" minWidth="80" itemEditor="com.effectiveui.view.editors.TypeEditor"/>
-				<mx:DataGridColumn dataField="resolution" minWidth="50" itemEditor="com.effectiveui.view.editors.ResolutionEditor"/>			
+				<mx:DataGridColumn dataField="summary" minWidth="280" itemRenderer="com.effectiveui.view.editors.SummaryEditor" rendererIsEditor="true"/>				
+				<mx:DataGridColumn dataField="version" minWidth="70" editable="false"/>			
+				<mx:DataGridColumn dataField="milestone" minWidth="30" itemRenderer="com.effectiveui.view.editors.MilestoneEditor" rendererIsEditor="true"/>
+				<mx:DataGridColumn dataField="owner" minWidth="50" itemRenderer="com.effectiveui.view.editors.OwnerEditor" rendererIsEditor="true"/>
+				<mx:DataGridColumn dataField="resolution" minWidth="50" itemRenderer="com.effectiveui.view.editors.ResolutionEditor" rendererIsEditor="true"/>				
+				<mx:DataGridColumn dataField="component" minWidth="70" itemRenderer="com.effectiveui.view.editors.ComponentEditor" rendererIsEditor="true"/>												
+				<mx:DataGridColumn dataField="priority" minWidth="50" itemRenderer="com.effectiveui.view.editors.PriorityEditor" rendererIsEditor="true"/>
+				<mx:DataGridColumn dataField="keywords" minWidth="80" itemRenderer="com.effectiveui.view.editors.KeywordEditor" rendererIsEditor="true"/>			
+				<mx:DataGridColumn dataField="reporter" minWidth="70" itemRenderer="com.effectiveui.view.editors.ReporterEditor" rendererIsEditor="true"/>				
+				<mx:DataGridColumn dataField="type" minWidth="80" itemRenderer="com.effectiveui.view.editors.TypeEditor" rendererIsEditor="true"/>
+				<mx:DataGridColumn dataField="status" minWidth="50" itemRenderer="com.effectiveui.view.editors.StatusEditor" rendererIsEditor="true"/>							
 			</component:columns>
 		</component:TracDataGrid>
 		<mx:TextArea id="description" height="40%" width="100%" change="editedItem = ticketGrid.selectedItem" focusOut="updateDescription()"/>
 	</mx:VDividedBox>
-	<mx:Canvas height="100%" width="{width - filterList.width}" right="0" visible="{!model.ticketsLoaded}" backgroundColor="0xFFFFFF">
-		<mx:Text text="Loading..." horizontalCenter="0" verticalCenter="0" fontSize="21" fontWeight="bold"/>
+	<mx:Canvas height="100%" width="{width - filterList.width}" right="0" visible="{!model.ticketsLoaded}" backgroundColor="0xFFFFFF">		
+		<mx:ProgressBar id="ticketProgress" label="{'Loading Tickets ' + ticketProgress.percentComplete.toPrecision(0) + '%'}" 
+			mode="{ProgressBarMode.MANUAL}" labelPlacement="center"
+			horizontalCenter="0" verticalCenter="0" fontSize="14" fontWeight="bold"/>		  
 	</mx:Canvas>
+	<util:Observe source="{model.numTicketsLoaded}" handler="{updateTicketProgress}"/>
 </mx:WindowedApplication>

@@ -17,7 +17,7 @@ package com.effectiveui.model
 		public function TracModel()
 		{
 			if ( _model != null ){
-				throw new Error("Only one EbayModelLocator instance should be instantiated");	
+				throw new Error("Only one TracModel instance should be instantiated");	
 			}			
 		}
 		
@@ -34,6 +34,8 @@ package com.effectiveui.model
 		public var types:ArrayCollection = new ArrayCollection();
 		public var owners:ArrayCollection = new ArrayCollection();
 		public var ticketsLoaded:Boolean = false;
+		public var ticketCount:Number;
+		public var numTicketsLoaded:Number = 0;;
 		
 		public const NO_VALUE:String = "";
 	}

@@ -25,6 +25,7 @@ package com.effectiveui.command
 		protected function handleTicketList(event:Event):void{
 			model.tickets.removeAll();
 			var ticketList:Array = (conn.getResponse() as Array);
+			model.ticketCount = ticketList.length;
 			var ticketRequestArray:Array = new Array();
 			
 			for(var i:int = 0; i < ticketList.length; i++){
@@ -46,16 +47,19 @@ package com.effectiveui.command
 		
 		protected function handleTicketsReturn(event:Event):void{
 			var tickets:Array = ((event.target as ConnectionImpl).getResponse() as Array);			
-			model.tickets.disableAutoUpdate();
+			model.tickets.disableAutoUpdate();			
 			for(var i:int = 0; i < tickets.length; i++){
 				if(tickets[i][0].length >= 4){
 					tickets[i][0][3]['id'] = tickets[i][0][0];
 					model.tickets.addItem(tickets[i][0][3]);
 				}
+				model.numTicketsLoaded++;
+			}			
+			if(model.numTicketsLoaded == model.ticketCount){
+				model.ticketsLoaded = true;
+				model.tickets.enableAutoUpdate();
+				model.tickets.refresh();
 			}
-			model.tickets.enableAutoUpdate();
-			model.tickets.refresh();
-			model.ticketsLoaded = true;
 		}
 		
 	}
