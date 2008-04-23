@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml" alpha="0"
+	openDuration="0" closeDuration="0" cornerRadius="0" arrowButtonWidth="1"
+	focusIn="this.open()" />
+	
