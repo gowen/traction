@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+<component:TracComboBox xmlns:component="com.effectiveui.component.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
 	dataProvider="{TracModel.getInstance().resolutions}"
-	change="updateTicket()" focusIn="this.open()">
+	change="updateTicket()">
 	<mx:Script>
 		<![CDATA[
 			import com.effectiveui.event.UpdateTicketEvent;
@@ -20,4 +20,4 @@
 		]]>
 	</mx:Script>
 	
-</mx:ComboBox>
+</component:TracComboBox>
