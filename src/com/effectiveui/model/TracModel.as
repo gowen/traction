@@ -36,6 +36,7 @@ package com.effectiveui.model
 		public var ticketsLoaded:Boolean = false;
 		public var ticketCount:Number;
 		public var numTicketsLoaded:Number = 0;;
+		public var loggedIn:Boolean = false;
 		
 		public const NO_VALUE:String = "";
 	}

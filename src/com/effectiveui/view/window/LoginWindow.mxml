@@ -91,6 +91,7 @@
 			
 			protected function closeLogin():void{
 				removeEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+				model.loggedIn = true;
 				close();
 			}
 			

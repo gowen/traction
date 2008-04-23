@@ -24,7 +24,11 @@
 			}
 			
 			protected function handleLoginClosing(event:Event):void{
-				this.visible = true;
+				if(model.loggedIn){
+					this.visible = true;
+				} else {
+					close();
+				}
 			}
 			
 			protected function evalFilters(data:Object):Boolean{				
