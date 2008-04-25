@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component:TracComboBox xmlns:component="com.effectiveui.component.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
-	dataProvider="{TracModel.getInstance().resolutions}"
-	change="updateTicket()">
+	dataProvider="{TracModel.getInstance().resolutions}" selectedIndex="{getResolutionIndex(TracTicket(data).resolution)}"
+	change="updateTicket()" xmlns:util="com.effectiveui.util.*">
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.component.TracTicket;
 			import com.effectiveui.event.UpdateTicketEvent;
 			import com.effectiveui.model.TracModel;
 			protected function updateTicket():void{
@@ -14,10 +15,27 @@
 					} else {
 						data.status = "reopened";
 					}					
-					new UpdateTicketEvent(data).dispatch();
+					new UpdateTicketEvent(TracTicket(data)).dispatch();
 				}
+			}
+			protected function getResolutionIndex(resolution:String):int{
+				var found:Boolean = false;
+				var idx:int = 0;
+				for (var i:int = 0; i < this.dataProvider.length && !found; i++){
+					if(this.dataProvider[i] == resolution){
+						found = true;
+						idx = i;
+					}
+				}
+				
+				return idx;
+			}
+			
+			protected function handleResolutionChanged():void{
+				selectedIndex = getResolutionIndex(data.resolution);
 			}
 		]]>
 	</mx:Script>
+	<util:Observe source="{TracTicket(data).resolution}" handler="{handleResolutionChanged}"/>
 	
 </component:TracComboBox>

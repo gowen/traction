@@ -2,12 +2,13 @@
 <mx:TextInput xmlns:mx="http://www.adobe.com/2006/mxml" text="{data.reporter}" change="changed=true" focusOut="updateTicket()">
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.component.TracTicket;
 			import com.effectiveui.event.UpdateTicketEvent;
 			protected var changed:Boolean = false;
 			protected function updateTicket():void{
 				if(changed){
 					data.reporter = this.text;
-					new UpdateTicketEvent(data).dispatch();
+					new UpdateTicketEvent(TracTicket(data)).dispatch();
 					changed = false;
 				}
 			}

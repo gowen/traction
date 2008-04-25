@@ -2,6 +2,8 @@ package com.effectiveui.command
 {
 	import com.adobe.cairngorm.commands.Command;
 	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.effectiveui.component.TracTicket;
+	import com.effectiveui.event.GetComponentsEvent;
 	import com.effectiveui.model.TracModel;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
@@ -49,9 +51,11 @@ package com.effectiveui.command
 			var tickets:Array = ((event.target as ConnectionImpl).getResponse() as Array);			
 			model.tickets.disableAutoUpdate();			
 			for(var i:int = 0; i < tickets.length; i++){
-				if(tickets[i][0].length >= 4){
-					tickets[i][0][3]['id'] = tickets[i][0][0];
-					model.tickets.addItem(tickets[i][0][3]);
+				if(tickets[i][0].length >= 4){					
+					var ticket:TracTicket = new TracTicket();
+					ticket.id = tickets[i][0][0];
+					ticket.getFromTicketObject(tickets[i][0][3]);
+					model.tickets.addItem(ticket);
 				}
 				model.numTicketsLoaded++;
 			}			
@@ -59,6 +63,7 @@ package com.effectiveui.command
 				model.ticketsLoaded = true;
 				model.tickets.enableAutoUpdate();
 				model.tickets.refresh();
+				new GetComponentsEvent().dispatch(); //get components here because otherwise they don't load right sometimes 
 			}
 		}
 		

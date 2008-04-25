@@ -2,6 +2,7 @@ package com.effectiveui.command
 {
 	import com.adobe.cairngorm.commands.Command;
 	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.effectiveui.component.TracTicket;
 	import com.effectiveui.event.UpdateTicketEvent;
 	import com.effectiveui.model.TracModel;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
@@ -12,7 +13,7 @@ package com.effectiveui.command
 		protected var model:TracModel = TracModel.getInstance();
 		public function execute(event:CairngormEvent):void
 		{			
-			var ticket:Object = (event as UpdateTicketEvent).ticket;
+			var ticket:TracTicket = (event as UpdateTicketEvent).ticket;
 			if(ticket.component == model.NO_VALUE){
 				ticket.component = "";
 			} 
@@ -35,14 +36,14 @@ package com.effectiveui.command
 				ticket.priority = "";
 			}
 			
-			model.tickets.refresh();
+		//	model.tickets.refresh();
 			
 			var conn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);			
 			var comment:String = " ";
 			conn.addParam(ticket.id, XMLRPCDataTypes.INT);
 			conn.addParam(comment, XMLRPCDataTypes.STRING);
-			conn.addParam(ticket, XMLRPCDataTypes.STRUCT);			
-			conn.call("ticket.update");
+			conn.addParam(ticket.toObject(), XMLRPCDataTypes.STRUCT);			
+			conn.call("ticket.update"); 
 		}
 		
 	}

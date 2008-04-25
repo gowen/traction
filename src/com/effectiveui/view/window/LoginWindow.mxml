@@ -62,8 +62,7 @@
 			protected function handleLogin(event:Event):void{		
 				trace("logged in successfully");
 														
-				new GetMilestonesEvent().dispatch();
-				new GetComponentsEvent().dispatch();
+				new GetMilestonesEvent().dispatch();				
 				new GetPrioritiesEvent().dispatch();
 				new GetResolutionsEvent().dispatch();
 				new GetStatusesEvent().dispatch();

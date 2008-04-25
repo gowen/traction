@@ -4,12 +4,13 @@
 	change="updateTicket()">
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.component.TracTicket;
 			import com.effectiveui.event.UpdateTicketEvent;
 			import com.effectiveui.model.TracModel;
 			protected function updateTicket():void{
 				if(this.selectedItem != data.owner){
 					data.owner = this.selectedItem;
-					new UpdateTicketEvent(data).dispatch();
+					new UpdateTicketEvent(TracTicket(data)).dispatch();
 				}
 			}
 		]]>
