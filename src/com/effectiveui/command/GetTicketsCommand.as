@@ -4,6 +4,7 @@ package com.effectiveui.command
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.effectiveui.component.TracTicket;
 	import com.effectiveui.event.GetComponentsEvent;
+	import com.effectiveui.event.GetTicketsEvent;
 	import com.effectiveui.model.TracModel;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
@@ -19,8 +20,14 @@ package com.effectiveui.command
 		{
 			//first we need to get the list of tickets for this user
 			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
-			conn.addParam("owner=" + model.username +"&status!=closed", XMLRPCDataTypes.STRING);
+			if(GetTicketsEvent(event).owner && GetTicketsEvent(event).owner.length > 0){
+				conn.addParam("owner=" + GetTicketsEvent(event).owner +"&status!=closed", XMLRPCDataTypes.STRING);
+			} else {
+				conn.addParam("status!=closed", XMLRPCDataTypes.STRING);
+			}
 			conn.addEventListener(Event.COMPLETE, handleTicketList);
+			model.ticketsLoaded = false;
+			model.numTicketsLoaded = 0;
 			conn.call("ticket.query");
 		}
 		

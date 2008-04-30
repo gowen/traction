@@ -26,6 +26,9 @@ package com.effectiveui.command
 			for each(var owner:String in owners){
 				model.owners.addItem(owner);
 			}
+			if(!model.owners.contains(model.username)){
+				model.owners.addItem(model.username);
+			}
 		}
 	}
 }

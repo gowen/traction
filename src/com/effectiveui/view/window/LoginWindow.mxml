@@ -69,7 +69,7 @@
 				new GetVersionsEvent().dispatch();
 				new GetTypesEvent().dispatch();
 				new GetOwnersEvent().dispatch();
-				new GetTicketsEvent().dispatch();
+				new GetTicketsEvent(model.username).dispatch();
 				
 				if(store.selected){
 					storeLoginInfo();

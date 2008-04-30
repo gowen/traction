@@ -6,9 +6,12 @@ package com.effectiveui.event
 	{
 		public static const GET_TICKETS:String = "gettickets";
 		
-		public function GetTicketsEvent()
+		public var owner:String;
+		
+		public function GetTicketsEvent(owner:String = null)
 		{
 			super(GET_TICKETS);
+			this.owner = owner;
 		}
 
 	}

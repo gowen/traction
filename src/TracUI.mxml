@@ -112,61 +112,109 @@
 			protected function updateTicketProgress():void{
 				ticketProgress.setProgress(model.numTicketsLoaded, model.ticketCount);
 			}			
+			
+			protected function sortSummary(obj1:Object, obj2:Object):int{
+				var summary1:String = obj1.summary;
+				var summary2:String = obj2.summary;
+				
+				if(summary1.toLowerCase() < summary2.toLowerCase()){
+					return -1;
+				} 
+				if(summary1.toLowerCase() > summary2.toLowerCase()){
+					return 1;
+				}
+				
+				return 0;
+			}
+			
+			protected function sortID(obj1:Object, obj2:Object):int{
+				var id1:int = Number(obj1.id as String);
+				var id2:int = Number(obj2.id as String);
+				
+				if(id1 < id2){
+					return -1;
+				}
+				if(id1 > id2){
+					return 1;
+				}
+				
+				return 0;
+			}
+			
+			protected function handleOwnerChanged():void{
+				var getTickets:GetTicketsEvent = new GetTicketsEvent(ownerBox.selectedItem.toString());
+				getTickets.dispatch();
+			}
+			
+			protected function setOwner():void{
+				if(model.owners.contains(model.username)){
+					ownerBox.selectedIndex = model.owners.getItemIndex(model.username);					
+				}
+			}
+			
 		]]>
 	</mx:Script>
-	<mx:VBox id="filterList" width="250" height="100%" left="10">
+	<mx:VBox id="filterList" width="220" height="100%" left="10" verticalGap="0">
 		<mx:Text text="Filters" fontWeight="bold" horizontalCenter="0"/>
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Summary/Description: "/>
 		<mx:TextInput id="textFilter" change="model.tickets.refresh()" width="90%"/>
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Status:"/>
 		<mx:ComboBox id="statusBox" dataProvider="{model.statuses}" change="model.tickets.refresh()" dataChange="statusBox.selectedIndex = 0"/>
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Version:"/>
 		<mx:ComboBox id="versionBox" dataProvider="{model.versions}" change="model.tickets.refresh()" dataChange="versionBox.selectedIndex = 0"/>
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Milestone:"/>
 		<mx:ComboBox id="milestoneBox" dataProvider="{model.milestones}" change="model.tickets.refresh()" dataChange="milestoneBox.selectedIndex = 0"/>
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>		
+		<mx:Text text="Owner:"/>
+		<mx:ComboBox id="ownerBox" dataProvider="{model.owners}" change="handleOwnerChanged()"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Keywords:"/>
 		<mx:TextInput id="keywordFilter" change="model.tickets.refresh()" width="90%"/>		
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Component:"/>
 		<mx:ComboBox id="componentBox" dataProvider="{model.components}" change="model.tickets.refresh()" dataChange="componentBox.selectedIndex = 0"/>
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Priority:"/>
 		<mx:ComboBox id="priorityBox" dataProvider="{model.priorities}" change="model.tickets.refresh()" dataChange="priorityBox.selectedIndex = 0"/>
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Type:"/>
 		<mx:ComboBox id="typeBox" dataProvider="{model.types}" change="model.tickets.refresh()" dataChange="typeBox.selectedIndex = 0"/>
-		<mx:Spacer height="3"/>
+		<mx:Spacer height="10"/>
 		<mx:Text text="Resolution:"/>
 		<mx:ComboBox id="resolutionBox" dataProvider="{model.resolutions}" change="model.tickets.refresh()" dataChange="resolutionBox.selectedIndex = 0"/>		
 	</mx:VBox>
-	<mx:VDividedBox height="100%" width="{width - filterList.width}" right="0">
-		<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="60%" width="100%" 
-				itemFocusIn="description.text = event.target.selectedItem.description" editable="true" rowHeight="25">
-			<component:columns>
-				<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor"/>				
-				<mx:DataGridColumn dataField="version" minWidth="70" editable="false"/>			
-				<mx:DataGridColumn dataField="milestone" minWidth="30" itemRenderer="com.effectiveui.view.editors.MilestoneEditor" rendererIsEditor="true"/>
-				<mx:DataGridColumn dataField="owner" minWidth="50" itemRenderer="com.effectiveui.view.editors.OwnerEditor" rendererIsEditor="true"/>
-				<mx:DataGridColumn dataField="resolution" minWidth="50" itemRenderer="com.effectiveui.view.editors.ResolutionEditor" rendererIsEditor="true"/>				
-				<mx:DataGridColumn dataField="component" minWidth="70" itemRenderer="com.effectiveui.view.editors.ComponentEditor" rendererIsEditor="true"/>												
-				<mx:DataGridColumn dataField="priority" minWidth="50" itemRenderer="com.effectiveui.view.editors.PriorityEditor" rendererIsEditor="true"/>
-				<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
-				<mx:DataGridColumn dataField="reporter" minWidth="70" itemEditor="com.effectiveui.view.editors.ReporterEditor"/>				
-				<mx:DataGridColumn dataField="type" minWidth="80" itemRenderer="com.effectiveui.view.editors.TypeEditor" rendererIsEditor="true"/>
-				<mx:DataGridColumn dataField="status" minWidth="50" itemRenderer="com.effectiveui.view.editors.StatusEditor" rendererIsEditor="true"/>							
-			</component:columns>
-		</component:TracDataGrid>
-		<mx:TextArea id="description" height="40%" width="100%" change="editedItem = TracTicket(ticketGrid.selectedItem)" focusOut="updateDescription()"/>
-	</mx:VDividedBox>
+	<mx:Canvas height="100%" width="{width - filterList.width}" right="0">
+		<mx:Text text="{'Currently viewing ' + model.tickets.length + ' tickets'}" right="0"/>
+		<mx:VDividedBox height="100%" width="100%" top="20">
+			<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="60%" width="100%" 
+					itemFocusIn="description.text = event.target.selectedItem.description" editable="true" rowHeight="25">
+				<component:columns>
+					<mx:DataGridColumn dataField="id" width="45" editable="false" sortCompareFunction="sortID"/>
+					<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor" sortCompareFunction="sortSummary"/>				
+					<mx:DataGridColumn dataField="version" width="70" editable="false"/>			
+					<mx:DataGridColumn dataField="milestone" width="40" itemRenderer="com.effectiveui.view.editors.MilestoneEditor" rendererIsEditor="true"/>
+					<mx:DataGridColumn dataField="owner" minWidth="55" itemRenderer="com.effectiveui.view.editors.OwnerEditor" rendererIsEditor="true"/>
+					<mx:DataGridColumn dataField="resolution" minWidth="50" itemRenderer="com.effectiveui.view.editors.ResolutionEditor" rendererIsEditor="true"/>				
+					<mx:DataGridColumn dataField="component" minWidth="70" itemRenderer="com.effectiveui.view.editors.ComponentEditor" rendererIsEditor="true"/>												
+					<mx:DataGridColumn dataField="priority" minWidth="50" itemRenderer="com.effectiveui.view.editors.PriorityEditor" rendererIsEditor="true"/>
+					<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
+					<mx:DataGridColumn dataField="reporter" minWidth="70" itemEditor="com.effectiveui.view.editors.ReporterEditor"/>				
+					<mx:DataGridColumn dataField="type" minWidth="80" itemRenderer="com.effectiveui.view.editors.TypeEditor" rendererIsEditor="true"/>
+					<mx:DataGridColumn dataField="status" minWidth="50" itemRenderer="com.effectiveui.view.editors.StatusEditor" rendererIsEditor="true"/>							
+				</component:columns>
+			</component:TracDataGrid>
+			<mx:TextArea id="description" height="40%" width="100%" change="editedItem = TracTicket(ticketGrid.selectedItem)" focusOut="updateDescription()"/>
+		</mx:VDividedBox>
+	</mx:Canvas>	
 	<mx:Canvas height="100%" width="{width - filterList.width}" right="0" visible="{!model.ticketsLoaded}" backgroundColor="0xFFFFFF">		
 		<mx:ProgressBar id="ticketProgress" label="{'Loading Tickets ' + ticketProgress.percentComplete.toPrecision(0) + '%'}" 
 			mode="{ProgressBarMode.MANUAL}" labelPlacement="center"
 			horizontalCenter="0" verticalCenter="0" fontSize="14" fontWeight="bold"/>		  
 	</mx:Canvas>
 	<util:Observe source="{model.numTicketsLoaded}" handler="{updateTicketProgress}"/>
+	<util:Observe source="{model.owners.length}" handler="{setOwner}"/>
 </mx:WindowedApplication>
