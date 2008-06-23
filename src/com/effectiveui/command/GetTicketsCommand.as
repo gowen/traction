@@ -35,6 +35,8 @@ package com.effectiveui.command
 			model.tickets.removeAll();
 			var ticketList:Array = (conn.getResponse() as Array);
 			model.ticketCount = ticketList.length;
+			if(model.ticketCount == 0)
+				model.ticketsLoaded = true;
 			var ticketRequestArray:Array = new Array();
 			
 			for(var i:int = 0; i < ticketList.length; i++){

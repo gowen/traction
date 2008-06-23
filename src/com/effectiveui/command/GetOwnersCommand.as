@@ -25,6 +25,11 @@ package com.effectiveui.command
 			var owners:Array = (conn.getResponse() as String).split("\r\n");
 			for each(var owner:String in owners){
 				model.owners.addItem(owner);
+				
+				var scoreCard:Object = new Object();
+				scoreCard["owner"] = owner;
+				scoreCard["score"] = 0;
+				model.scoreBoard.addItem(scoreCard);
 			}
 			if(!model.owners.contains(model.username)){
 				model.owners.addItem(model.username);

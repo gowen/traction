@@ -1,6 +1,7 @@
 package com.effectiveui.model
 {
 	import com.adobe.cairngorm.model.ModelLocator;
+	import com.effectiveui.component.TracTicket;
 	
 	import mx.collections.ArrayCollection;
 
@@ -24,6 +25,7 @@ package com.effectiveui.model
 		public var username:String;
 		public var password:String;
 		public var serverURL:String;
+		public var currentTicket:TracTicket = new TracTicket();
 		public var tickets:ArrayCollection = new ArrayCollection();
 		public var milestones:ArrayCollection = new ArrayCollection();
 		public var components:ArrayCollection = new ArrayCollection();
@@ -37,6 +39,8 @@ package com.effectiveui.model
 		public var ticketCount:Number;
 		public var numTicketsLoaded:Number = 0;;
 		public var loggedIn:Boolean = false;
+		
+		public var scoreBoard:ArrayCollection = new ArrayCollection();
 		
 		public const NO_VALUE:String = "";
 	}
