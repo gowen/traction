@@ -22,6 +22,18 @@ package com.effectiveui.model
 			}			
 		}
 		
+		public function dateToISO():String {
+			var d:Date = new Date();
+	        var iso:String = d.getUTCFullYear() +
+	                ((d.getUTCMonth()+1 < 10)?'0':'') + (d.getUTCMonth()+1) +
+	                ((d.getUTCDate() < 10)?'0':'') + d.getUTCDate()+'T'+
+	                ((d.getUTCHours()< 10)?'0':'') + d.getUTCHours() +':'+
+	                ((d.getUTCMinutes()< 10)?'0':'') + d.getUTCMinutes() +':'+
+	                ((d.getUTCSeconds()< 10)?'0':'') + d.getUTCSeconds(); //+' ' +0;
+        iso = iso.substring(0, iso.length-0);
+        return iso;
+    }
+		
 		public var username:String;
 		public var password:String;
 		public var serverURL:String;
@@ -39,10 +51,13 @@ package com.effectiveui.model
 		public var ticketCount:Number;
 		public var numTicketsLoaded:Number = 0;;
 		public var loggedIn:Boolean = false;
+		public var currentTimeStamp:String = dateToISO();
 		
 		public var scoreBoard:ArrayCollection = new ArrayCollection();
 		
 		public const NO_VALUE:String = "";
+		
+		
 	}
 	
 	

@@ -6,6 +6,7 @@
 	<control:TracUIController id="controller"/>
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.event.GetNewTicketsEvent;
 			import com.effectiveui.event.GetScoresEvent;
 			import com.effectiveui.component.TracTicket;
 			import mx.events.DataGridEventReason;
@@ -115,6 +116,13 @@
 				new CreateNewTicketEvent(model.currentTicket).dispatch();
 				renewView();
 				clearNewTicketCreator();
+				updateTickets();
+				model.tickets.refresh();
+			}
+			
+			protected function updateTickets():void{
+				new GetNewTicketsEvent(model.currentTimeStamp).dispatch();
+				model.currentTimeStamp = model.dateToISO();
 				model.tickets.refresh();
 			}
 			
@@ -293,24 +301,27 @@
 		</mx:Accordion>
 		<mx:Canvas height="100%" width="100%" right="0">
 			<mx:Text text="{'Currently viewing ' + model.tickets.length + ' tickets'}" right="0"/>
-			<mx:VDividedBox height="100%" width="100%" top="20">
-				<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="60%" width="100%" 
-						itemFocusIn="description.text = event.target.selectedItem.description" editable="true" rowHeight="25">
-					<component:columns>
-						<mx:DataGridColumn dataField="id" width="45" editable="false" sortCompareFunction="sortID"/>
-						<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor" sortCompareFunction="sortSummary"/>				
-						<mx:DataGridColumn dataField="version" width="40" editable="false"/>			
-						<mx:DataGridColumn dataField="milestone" width="60" itemRenderer="com.effectiveui.view.editors.MilestoneEditor" rendererIsEditor="true"/>
-						<mx:DataGridColumn dataField="owner" minWidth="55" itemRenderer="com.effectiveui.view.editors.OwnerEditor" rendererIsEditor="true"/>
-						<mx:DataGridColumn dataField="resolution" minWidth="60" itemRenderer="com.effectiveui.view.editors.ResolutionEditor" rendererIsEditor="true"/>				
-						<mx:DataGridColumn dataField="component" minWidth="55" itemRenderer="com.effectiveui.view.editors.ComponentEditor" rendererIsEditor="true"/>												
-						<mx:DataGridColumn dataField="priority" minWidth="50" itemRenderer="com.effectiveui.view.editors.PriorityEditor" rendererIsEditor="true"/>
-						<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
-						<mx:DataGridColumn dataField="reporter" minWidth="70" itemEditor="com.effectiveui.view.editors.ReporterEditor"/>				
-						<mx:DataGridColumn dataField="type" minWidth="80" itemRenderer="com.effectiveui.view.editors.TypeEditor" rendererIsEditor="true"/>
-						<mx:DataGridColumn dataField="status" minWidth="50" itemRenderer="com.effectiveui.view.editors.StatusEditor" rendererIsEditor="true"/>							
-					</component:columns>
-				</component:TracDataGrid>
+			<mx:VDividedBox height="100%" width="100%" top="20" dividerThickness="1">
+				<mx:VBox height="100%" width="100%">
+					<mx:Button id="refreshTickets" height="15" width="70" right="0" label="Refresh" click="updateTickets()"/>
+					<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="100%" width="100%" 
+							itemFocusIn="description.text = event.target.selectedItem.description" editable="true" rowHeight="25">
+						<component:columns>
+							<mx:DataGridColumn dataField="id" width="45" editable="false" sortCompareFunction="sortID"/>
+							<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor" sortCompareFunction="sortSummary"/>				
+							<mx:DataGridColumn dataField="version" width="40" editable="false"/>			
+							<mx:DataGridColumn dataField="milestone" width="60" itemRenderer="com.effectiveui.view.editors.MilestoneEditor" rendererIsEditor="true"/>
+							<mx:DataGridColumn dataField="owner" minWidth="55" itemRenderer="com.effectiveui.view.editors.OwnerEditor" rendererIsEditor="true"/>
+							<mx:DataGridColumn dataField="resolution" minWidth="60" itemRenderer="com.effectiveui.view.editors.ResolutionEditor" rendererIsEditor="true"/>				
+							<mx:DataGridColumn dataField="component" minWidth="55" itemRenderer="com.effectiveui.view.editors.ComponentEditor" rendererIsEditor="true"/>												
+							<mx:DataGridColumn dataField="priority" minWidth="50" itemRenderer="com.effectiveui.view.editors.PriorityEditor" rendererIsEditor="true"/>
+							<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor"/>			
+							<mx:DataGridColumn dataField="reporter" minWidth="70" itemEditor="com.effectiveui.view.editors.ReporterEditor"/>				
+							<mx:DataGridColumn dataField="type" minWidth="80" itemRenderer="com.effectiveui.view.editors.TypeEditor" rendererIsEditor="true"/>
+							<mx:DataGridColumn dataField="status" minWidth="50" itemRenderer="com.effectiveui.view.editors.StatusEditor" rendererIsEditor="true"/>							
+						</component:columns>
+					</component:TracDataGrid>
+				</mx:VBox>
 				<mx:TextArea id="description" height="40%" width="100%" change="editedItem = TracTicket(ticketGrid.selectedItem)" focusOut="updateDescription()"/>
 			</mx:VDividedBox>
 		</mx:Canvas>	
