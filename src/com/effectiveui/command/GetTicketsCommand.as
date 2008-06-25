@@ -72,6 +72,7 @@ package com.effectiveui.command
 				model.ticketsLoaded = true;
 				model.tickets.enableAutoUpdate();
 				model.tickets.refresh();
+				model.currentTimeStamp = model.dateToISO();
 				new GetComponentsEvent().dispatch(); //get components here because otherwise they don't load right sometimes 
 			}
 		}

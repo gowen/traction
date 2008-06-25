@@ -22,6 +22,7 @@ package com.effectiveui.model
 			}			
 		}
 		
+		//converts the current date timestamp to an .Iso86 format
 		public function dateToISO():String {
 			var d:Date = new Date();
 	        var iso:String = d.getUTCFullYear() +
@@ -29,7 +30,7 @@ package com.effectiveui.model
 	                ((d.getUTCDate() < 10)?'0':'') + d.getUTCDate()+'T'+
 	                ((d.getUTCHours()< 10)?'0':'') + d.getUTCHours() +':'+
 	                ((d.getUTCMinutes()< 10)?'0':'') + d.getUTCMinutes() +':'+
-	                ((d.getUTCSeconds()< 10)?'0':'') + d.getUTCSeconds(); //+' ' +0;
+	                ((d.getUTCSeconds()< 10)?'0':'') + d.getUTCSeconds();
         iso = iso.substring(0, iso.length-0);
         return iso;
     }
@@ -51,7 +52,7 @@ package com.effectiveui.model
 		public var ticketCount:Number;
 		public var numTicketsLoaded:Number = 0;;
 		public var loggedIn:Boolean = false;
-		public var currentTimeStamp:String = dateToISO();
+		public var currentTimeStamp:String = new String();
 		
 		public var scoreBoard:ArrayCollection = new ArrayCollection();
 		
