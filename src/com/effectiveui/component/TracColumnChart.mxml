@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import com.effectiveui.model.TracModel;
+			
+			[Bindable]
+			private var model:TracModel = TracModel.getInstance();
+			
+		]]>
+	</mx:Script>
+	<mx:ColumnChart id="scoreChart" dataProvider="{model.scoreBoard}" width="100%" height="100%">
+		<mx:horizontalAxis>
+			<mx:CategoryAxis
+				dataProvider="{model.scoreBoard}"
+				categoryField="owner"/>
+		</mx:horizontalAxis>
+		<mx:series>
+			<mx:ColumnSeries                
+				xField="owner" 
+				yField="score" 
+				displayName="score"/>
+		</mx:series>
+	</mx:ColumnChart>
+</mx:Panel>

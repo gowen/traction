@@ -1,110 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="450" height="200" creationComplete="init()">
-	<mx:Text text="Could not login. Please try again" fontWeight="bold" color="0x990000" visible="false" id="errorMsg" horizontalCenter="0"/>
-	<mx:VBox left="30" top="25" verticalGap="12">
-		<mx:Text text="Username:"/>
-		<mx:Text text="Password:"/>
-		<mx:Text text="Server URL:"/>
-	</mx:VBox>
-	<mx:VBox left="100" top="25">
-		<mx:TextInput id="uname" enabled="{!loggingIn}"/>
-		<mx:TextInput id="pass" displayAsPassword="true" enabled="{!loggingIn}"/>
-		<mx:TextInput text="https://effectiveui-trac.cvsdude.com/TaskManagement" id="serverURL" enabled="{!loggingIn}"/>
-	</mx:VBox>		
-	<mx:HBox bottom="30" horizontalCenter="0">
-		<mx:Button label="Submit" click="login()" />
-		<mx:CheckBox label="Store my login information" id="store"/>	
-	</mx:HBox>	
-	<mx:Script>
-		<![CDATA[
-			import com.mattism.http.xmlrpc.ConnectionImpl;
-			import com.effectiveui.event.GetOwnersEvent;
-			import com.effectiveui.event.GetTypesEvent;
-			import com.effectiveui.event.GetVersionsEvent;
-			import com.effectiveui.event.GetStatusesEvent;
-			import com.effectiveui.event.GetResolutionsEvent;
-			import com.effectiveui.event.GetPrioritiesEvent;
-			import com.effectiveui.event.GetComponentsEvent;
-			import com.effectiveui.event.GetMilestonesEvent;
-			import com.effectiveui.event.GetTicketsEvent;
-			import com.effectiveui.model.TracModel;
-			
-			[Bindable]
-			protected var loggingIn:Boolean = false;
-			
-			private function init():void{
-				addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
-				this.focusManager.setFocus(uname);
-				var loginBytes:ByteArray = EncryptedLocalStore.getItem("loginInfo");
-				if(loginBytes){
-					loginBytes.position = 0;
-					uname.text = loginBytes.readUTF();
-					pass.text = loginBytes.readUTF();
-					serverURL.text = loginBytes.readUTF();
-					store.selected = true;
-				}
-			}
-			
-			private var model:TracModel = TracModel.getInstance();
-		
-			private function login():void{
-				loggingIn = true;
-				trace("attempting to login");
-				model.username = uname.text;
-				model.password = pass.text;
-				model.serverURL = serverURL.text + "/login/xmlrpc";				
-				var conn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);	
-				conn.addEventListener(Event.COMPLETE, handleLogin);		
-				conn.addEventListener(IOErrorEvent.IO_ERROR, handleLoginFailed);
-				conn.call("system.listMethods");												
-			}
-			
-			protected function handleLogin(event:Event):void{		
-				trace("logged in successfully");
-														
-				new GetMilestonesEvent().dispatch();				
-				new GetPrioritiesEvent().dispatch();
-				new GetResolutionsEvent().dispatch();
-				new GetStatusesEvent().dispatch();
-				new GetVersionsEvent().dispatch();
-				new GetTypesEvent().dispatch();
-				new GetOwnersEvent().dispatch();
-				new GetTicketsEvent(model.username).dispatch();
+<mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="450" height="200" creationComplete="init()" backgroundColor="#000000">
+	<mx:Canvas height="100%" width="100%" top="5" bottom="5" left="5" right="5" cornerRadius="4" backgroundColor="#444441" borderColor="#000000">
+		<mx:Text text="Could not login. Please try again" fontWeight="bold" color="0x990000" visible="false" id="errorMsg" horizontalCenter="0"/>
+		<mx:VBox left="30" top="25" verticalGap="12">
+			<mx:Text text="Username:"/>
+			<mx:Text text="Password:"/>
+			<mx:Text text="Server URL:"/>
+		</mx:VBox>
+		<mx:VBox left="100" top="25">
+			<mx:TextInput id="uname" enabled="{!loggingIn}"/>
+			<mx:TextInput id="pass" displayAsPassword="true" enabled="{!loggingIn}"/>
+			<mx:TextInput text="https://effectiveui-trac.cvsdude.com/TaskManagement" id="serverURL" enabled="{!loggingIn}"/>
+		</mx:VBox>		
+		<mx:HBox bottom="30" horizontalCenter="0">
+			<mx:Button label="Submit" click="login()" styleName="customButtonStyle" />
+			<mx:CheckBox label="Store my login information" id="store" textRollOverColor="#128FC9"/>	
+		</mx:HBox>	
+		<mx:Script>
+			<![CDATA[
+				import com.mattism.http.xmlrpc.ConnectionImpl;
+				import com.effectiveui.event.GetOwnersEvent;
+				import com.effectiveui.event.GetTypesEvent;
+				import com.effectiveui.event.GetVersionsEvent;
+				import com.effectiveui.event.GetStatusesEvent;
+				import com.effectiveui.event.GetResolutionsEvent;
+				import com.effectiveui.event.GetPrioritiesEvent;
+				import com.effectiveui.event.GetComponentsEvent;
+				import com.effectiveui.event.GetMilestonesEvent;
+				import com.effectiveui.event.GetTicketsEvent;
+				import com.effectiveui.model.TracModel;
 				
-				if(store.selected){
-					storeLoginInfo();
-				} else {
-					EncryptedLocalStore.removeItem("loginInfo");
+				[Bindable]
+				protected var loggingIn:Boolean = false;
+				
+				private function init():void{
+					addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+					this.focusManager.setFocus(uname);
+					var loginBytes:ByteArray = EncryptedLocalStore.getItem("loginInfo");
+					if(loginBytes){
+						loginBytes.position = 0;
+						uname.text = loginBytes.readUTF();
+						pass.text = loginBytes.readUTF();
+						serverURL.text = loginBytes.readUTF();
+						store.selected = true;
+					}
 				}
-				closeLogin();
-			} 
+				
+				private var model:TracModel = TracModel.getInstance();
 			
-			protected function storeLoginInfo():void{
-				var loginBytes:ByteArray = new ByteArray();
-				loginBytes.writeUTF(model.username);
-				loginBytes.writeUTF(model.password);
-				loginBytes.writeUTF(serverURL.text);
-				loginBytes.position = 0;
-				EncryptedLocalStore.setItem("loginInfo", loginBytes);
-			}
-			
-			protected function closeLogin():void{
-				removeEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
-				model.loggedIn = true;
-				close();
-			}
-			
-			private function handleKeyDown(event:KeyboardEvent):void{
-				if(event.keyCode == Keyboard.ENTER){
-					login();
+				private function login():void{
+					loggingIn = true;
+					trace("attempting to login");
+					model.username = uname.text;
+					model.password = pass.text;
+					model.serverURL = serverURL.text + "/login/xmlrpc";				
+					var conn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);	
+					conn.addEventListener(Event.COMPLETE, handleLogin);		
+					conn.addEventListener(IOErrorEvent.IO_ERROR, handleLoginFailed);
+					conn.call("system.listMethods");												
 				}
-			}
-			
-			protected function handleLoginFailed(event:Event):void{
-				trace("login failed");
-				loggingIn = false;
-				errorMsg.visible = true;
-			}
-		]]>
-	</mx:Script>
+				
+				protected function handleLogin(event:Event):void{		
+					trace("logged in successfully");
+															
+					new GetMilestonesEvent().dispatch();				
+					new GetPrioritiesEvent().dispatch();
+					new GetResolutionsEvent().dispatch();
+					new GetStatusesEvent().dispatch();
+					new GetVersionsEvent().dispatch();
+					new GetTypesEvent().dispatch();
+					new GetOwnersEvent().dispatch();
+					new GetTicketsEvent(model.username).dispatch();
+					
+					if(store.selected){
+						storeLoginInfo();
+					} else {
+						EncryptedLocalStore.removeItem("loginInfo");
+					}
+					closeLogin();
+				} 
+				
+				protected function storeLoginInfo():void{
+					var loginBytes:ByteArray = new ByteArray();
+					loginBytes.writeUTF(model.username);
+					loginBytes.writeUTF(model.password);
+					loginBytes.writeUTF(serverURL.text);
+					loginBytes.position = 0;
+					EncryptedLocalStore.setItem("loginInfo", loginBytes);
+				}
+				
+				protected function closeLogin():void{
+					removeEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+					model.loggedIn = true;
+					close();
+				}
+				
+				private function handleKeyDown(event:KeyboardEvent):void{
+					if(event.keyCode == Keyboard.ENTER){
+						login();
+					}
+				}
+				
+				protected function handleLoginFailed(event:Event):void{
+					trace("login failed");
+					loggingIn = false;
+					errorMsg.visible = true;
+				}
+			]]>
+		</mx:Script>
+	</mx:Canvas>
 </mx:Window>

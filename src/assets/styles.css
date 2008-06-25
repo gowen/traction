@@ -1,0 +1,81 @@
+/* CSS file */
+global
+{
+	 color: #FFFFFF;
+}
+
+DataGrid
+{
+	header-separator-skin: ClassReference("assets.headerSeperatorSkin");
+	textRollOverColor: #000000;
+	selectionColor: #006699;
+	textSelectedColor: #000000;
+}
+
+ComboBox
+{
+	alternatingItemColors:#333333,#555555;
+	color:#000000;
+	rollOverColor: #128FC9;
+	selectionColor: #006699;
+	textRollOverColor: #FFFFFF;
+	textSelectedColor: #000000;
+}
+
+.gridCombos
+{
+	alternatingItemColors:#333333,#555555;
+	color:#FFFFFF;
+	rollOverColor: #128FC9;
+	selectionColor: #006699;
+	textRollOverColor: #000000;
+	textSelectedColor: #FFFFFF;
+}
+
+TextInput
+{
+	backgroundColor:#60605C;
+	borderColor: #000000;
+	borderStyle: solid;
+	backgroundDisabledColor: #333333;
+	color:#FFFFFF
+}
+
+BarChart
+{
+	color:#222222;
+}
+
+.accordionHeader
+
+{
+	fillAlphas: 1.0, 1.0;
+	fillColors: #333333, #000000;
+	selectedFillAlphas: 1.0, 1.0;
+	selectedFillColors: #333333, #000000;
+	textRollOverColor: #CCCCCC;
+	textSelectedColor: #128FC9;
+	borderColor: #333333;
+
+}
+
+
+
+.customButtonStyle {
+     cornerRadii: 7, 7, 7, 7;
+     borderColors: #333333, #333333;
+     overBorderColors: #00DDFF, #00DDFF;
+     selectedBorderColors: #00DDFF, #00DDFF;
+     borderThickness: 3;
+     fillColors: #0099CC, #006699;
+     fillAlphas: 1, 0.75;
+     fillColorRatios: 245, 250;
+     overFillColors: #006699, #0099CC;
+     overFillAlphas: 0.5, 0.5;
+     overFillColorRatios: 0, 50;
+     backgroundDisabledColor: #666666; 
+     color: #FFFFFF;
+     textRollOverColor: #FFFFFF;
+     fontSize: 10;
+}
+

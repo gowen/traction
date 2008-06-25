@@ -32,6 +32,7 @@
 			protected function handleLoginClosing(event:Event):void{
 				if(model.loggedIn){
 					this.visible = true;
+					this.move(50,100);
 				} else {
 					close();
 				}
@@ -195,124 +196,145 @@
 				if(dashboardAccordian.selectedChild.id	== "newTicketBox")
 					dashboardAccordian.percentWidth = 100;
 				else
-					dashboardAccordian.width = 220;
+					dashboardAccordian.width = 240;
 			}
 			
 		]]>
 	</mx:Script>
-	
+	<mx:Style source="assets/styles.css"/>
 	<mx:Resize id="resizeNewTicket" duration="700"/>
-	<mx:HBox height="100%" width="100%" horizontalGap="0">
-		<mx:Accordion id="dashboardAccordian" height="100%" width="220" click="hideOrShowCreateNew()" resizeEffect="{resizeNewTicket}" >
-			<mx:VBox id="filterList" label="Filters" width="220" height="100%" 
-				paddingLeft="10" paddingBottom="10" verticalGap="0">
-				<mx:Spacer height="10"/>
-				<mx:Text text="Summary/Description: "/>
-				<mx:TextInput id="textFilter" change="model.tickets.refresh()" width="90%"/>
-				<mx:Spacer height="10"/>
-				<mx:Text text="Status:"/>
-				<mx:ComboBox id="statusBox" dataProvider="{model.statuses}" change="model.tickets.refresh()" dataChange="statusBox.selectedIndex = 0"/>
-				<mx:Spacer height="10"/>
-				<mx:Text text="Version:"/>
-				<mx:ComboBox id="versionBox" dataProvider="{model.versions}" change="model.tickets.refresh()" dataChange="versionBox.selectedIndex = 0"/>
-				<mx:Spacer height="10"/>
-				<mx:Text text="Milestone:"/>
-				<mx:ComboBox id="milestoneBox" dataProvider="{model.milestones}" change="model.tickets.refresh()" dataChange="milestoneBox.selectedIndex = 0"/>
-				<mx:Spacer height="10"/>		
-				<mx:Text text="Owner:"/>
-				<mx:ComboBox id="ownerBox" dataProvider="{model.owners}" change="handleOwnerChanged()"/>
-				<mx:Spacer height="10"/>
-				<mx:Text text="Keywords:"/>
-				<mx:TextInput id="keywordFilter" change="model.tickets.refresh()" width="90%"/>		
-				<mx:Spacer height="10"/>
-				<mx:Text text="Component:"/>
-				<mx:ComboBox id="componentBox" dataProvider="{model.components}" change="model.tickets.refresh()" dataChange="componentBox.selectedIndex = 0"/>
-				<mx:Spacer height="10"/>
-				<mx:Text text="Priority:"/>
-				<mx:ComboBox id="priorityBox" dataProvider="{model.priorities}" change="model.tickets.refresh()" dataChange="priorityBox.selectedIndex = 0"/>
-				<mx:Spacer height="10"/>
-				<mx:Text text="Type:"/>
-				<mx:ComboBox id="typeBox" dataProvider="{model.types}" change="model.tickets.refresh()" dataChange="typeBox.selectedIndex = 0"/>
-				<mx:Spacer height="10"/>
-				<mx:Text text="Resolution:"/>
-				<mx:ComboBox id="resolutionBox" dataProvider="{model.resolutions}" change="model.tickets.refresh()" dataChange="resolutionBox.selectedIndex = 0"/>		
+	<mx:HBox height="100%" width="100%" horizontalGap="0" backgroundColor="#000000">
+		<mx:Accordion id="dashboardAccordian" height="100%" width="240" borderColor="#222222" backgroundColor="#111111"
+			click="hideOrShowCreateNew()" resizeEffect="{resizeNewTicket}" headerStyleName="accordionHeader">
+			<mx:VBox id="filterList" label="Filters" width="100%" height="100%" 
+				paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" verticalGap="0">
+				<mx:Canvas height="100%" width="100%"
+					borderColor="#000000" cornerRadius="8" backgroundColor="#50504D">
+					<mx:VBox width="100%" height="100%" verticalGap="0" paddingLeft="5">
+						<mx:Spacer height="10"/>
+						<mx:Text text="Summary/Description: "/>
+						<mx:TextInput id="textFilter" change="model.tickets.refresh()" width="90%"/>
+						<mx:Spacer height="10"/>
+						<mx:Text text="Status:"/>
+						<mx:ComboBox id="statusBox" dataProvider="{model.statuses}" change="model.tickets.refresh()" dataChange="statusBox.selectedIndex = 0"/>
+						<mx:Spacer height="10"/>
+						<mx:Text text="Version:"/>
+						<mx:ComboBox id="versionBox" dataProvider="{model.versions}" change="model.tickets.refresh()" dataChange="versionBox.selectedIndex = 0"/>
+						<mx:Spacer height="10"/>
+						<mx:Text text="Milestone:"/>
+						<mx:ComboBox id="milestoneBox" dataProvider="{model.milestones}" change="model.tickets.refresh()" dataChange="milestoneBox.selectedIndex = 0"/>
+						<mx:Spacer height="10"/>		
+						<mx:Text text="Owner:"/>
+						<mx:ComboBox id="ownerBox" dataProvider="{model.owners}" change="handleOwnerChanged()"/>
+						<mx:Spacer height="10"/>
+						<mx:Text text="Keywords:"/>
+						<mx:TextInput id="keywordFilter" change="model.tickets.refresh()" width="90%"/>		
+						<mx:Spacer height="10"/>
+						<mx:Text text="Component:"/>
+						<mx:ComboBox id="componentBox" dataProvider="{model.components}" change="model.tickets.refresh()" dataChange="componentBox.selectedIndex = 0"/>
+						<mx:Spacer height="10"/>
+						<mx:Text text="Priority:"/>
+						<mx:ComboBox id="priorityBox" dataProvider="{model.priorities}" change="model.tickets.refresh()" dataChange="priorityBox.selectedIndex = 0"/>
+						<mx:Spacer height="10"/>
+						<mx:Text text="Type:"/>
+						<mx:ComboBox id="typeBox" dataProvider="{model.types}" change="model.tickets.refresh()" dataChange="typeBox.selectedIndex = 0"/>
+						<mx:Spacer height="10"/>
+						<mx:Text text="Resolution:"/>
+						<mx:ComboBox id="resolutionBox" dataProvider="{model.resolutions}" change="model.tickets.refresh()" dataChange="resolutionBox.selectedIndex = 0"/>		
+					</mx:VBox>
+				</mx:Canvas>
 			</mx:VBox>
 			<mx:VBox id="newTicketBox" label="New Ticket" width="100%" height="100%" verticalGap="0">
 				<mx:VBox label="Create New Ticket"  width="100%" height="100%" 
-					paddingLeft="10" paddingBottom="10" verticalGap="0">
+					paddingLeft="10" paddingBottom="10" paddingRight="10" verticalGap="0">
 					<mx:Spacer height="5"/>
 					<mx:Canvas height="20" width="100%">
-						<mx:Button id="clearTicket" label="clear" height="15" width="70" top="0" right="5" click="clearNewTicketCreator()"/>
+						<mx:Button id="clearTicket" label="clear" height="15" width="70" top="0" right="5" 
+							styleName="customButtonStyle" click="clearNewTicketCreator()"/>
 					</mx:Canvas>
-					<mx:Spacer height="5"/>
-					<mx:Text text="Short Summary: "/>
-					<mx:TextInput id="newTicketSummary" change="model.currentTicket.summary = newTicketSummary.text" width="85%"/>
-					<mx:Spacer height="10"/>
-					<mx:HBox height="25" width="100%" horizontalGap="0">
-						<mx:Text text="Type: "/>
-						<mx:ComboBox id="newTypeBox" dataProvider="{model.types}" change="model.currentTicket.type = newTypeBox.selectedItem as String" 
-							dataChange="newTypeBox.selectedIndex = 0"/>
-					</mx:HBox>
-					<mx:Text text="Full description: "/>
-					<mx:TextArea id="newDescription" height="40%" width="85%" focusOut="model.currentTicket.description = newDescription.text" right="10"/>
-					<mx:Spacer height="10"/>
-					<mx:HBox id="ticketProperties" height = "100%" width="100%">
-						<mx:VBox height="100%" width="100%" verticalGap="5">
-							<mx:HBox height="100%" width="100%">
-								<mx:Text text="Priority: "/>
-								<mx:ComboBox id="newPriorityBox" dataProvider="{model.priorities}" change="model.currentTicket.priority = newPriorityBox.selectedItem as String" 
-									dataChange="newPriorityBox.selectedIndex = 0"/>
+					<mx:Canvas height="100%" width="100%" right="5" left="5" top="5" bottom="5"
+						borderColor="#333333" borderThickness="2" cornerRadius="8" backgroundColor="#50504D">
+						<mx:VBox label="Create New Ticket"  width="100%" height="100%" paddingLeft="5" paddingBottom="5" verticalGap="0">
+							<mx:Spacer height="5"/>
+							<mx:Text text="Short Summary: "/>
+							<mx:TextInput id="newTicketSummary" change="model.currentTicket.summary = newTicketSummary.text" width="85%"
+								top="5" bottom="5" right="10" left="10" />
+							<mx:Spacer height="10"/>
+							<mx:HBox height="25" width="100%" horizontalGap="0">
+								<mx:Text text="Type: "/>
+								<mx:ComboBox id="newTypeBox" dataProvider="{model.types}" change="model.currentTicket.type = newTypeBox.selectedItem as String" 
+									dataChange="newTypeBox.selectedIndex = 0"/>
 							</mx:HBox>
-							<mx:HBox height="100%" width="100%">
-								<mx:Text text="Component:"/>
-								<mx:ComboBox id="newComponentBox" dataProvider="{model.components}" change="model.currentTicket.component = newComponentBox.selectedItem as String" 
-									dataChange="newComponentBox.selectedIndex = 0"/>
+							<mx:Text text="Full description: "/>
+							<mx:TextArea id="newDescription" height="100%" width="85%" focusOut="model.currentTicket.description = newDescription.text" 
+								backgroundColor="#60605C" color="#FFFFFF" cornerRadius="4"
+								top="5" bottom="5" right="10" left="10" borderColor="#000000"/>
+							<mx:Spacer height="10"/>
+							<mx:HBox id="ticketProperties" height = "100%" width="100%">
+								<mx:VBox height="100%" width="100%" verticalGap="5">
+									<mx:HBox height="100%" width="100%">
+										<mx:Text text="Priority: "/>
+										<mx:ComboBox id="newPriorityBox" dataProvider="{model.priorities}" change="model.currentTicket.priority = newPriorityBox.selectedItem as String" 
+											dataChange="newPriorityBox.selectedIndex = 0"/>
+									</mx:HBox>
+									<mx:HBox height="100%" width="100%">
+										<mx:Text text="Component:"/>
+										<mx:ComboBox id="newComponentBox" dataProvider="{model.components}" change="model.currentTicket.component = newComponentBox.selectedItem as String" 
+											dataChange="newComponentBox.selectedIndex = 0"/>
+									</mx:HBox>
+									<mx:HBox height="100%" width="100%">
+										<mx:Text text="Keywords:"/>
+										<mx:TextInput id="newKeywords" change="model.currentTicket.keywords = newKeywords.text" width="100%"
+											top="5" bottom="5" right="10" left="10"/>	
+									</mx:HBox>
+								</mx:VBox>
+								<mx:VRule top="5" bottom="5" height="100%" strokeColor="#333333" shadowColor="#666666" strokeWidth="2"/>
+								<mx:VBox height="100%" width="100%" verticalGap="5">
+									<mx:HBox height="100%" width="100%">
+										<mx:Text text="Milestone:"/>
+										<mx:ComboBox  id="newMilestoneBox" dataProvider="{model.milestones}" change="model.currentTicket.milestone = newMilestoneBox.selectedItem as String" 
+											dataChange="newMilestoneBox.selectedIndex = 0" />
+									</mx:HBox>
+									<mx:HBox height="100%" width="100%">
+										<mx:Text text="Version:"/>
+										<mx:ComboBox id="newVersionBox" dataProvider="{model.versions}" change="model.currentTicket.version = newVersionBox.selectedItem as String" 
+											dataChange="versionBox.selectedIndex = 0"/>
+									</mx:HBox>
+									<mx:HBox height="100%" width="100%">
+										<mx:Text text="Assign To:"/>
+										<mx:ComboBox id="newOwnerBox" dataProvider="{model.owners}" change="model.currentTicket.owner = newOwnerBox.selectedItem as String"/>
+									</mx:HBox>
+								</mx:VBox>
 							</mx:HBox>
-							<mx:HBox height="100%" width="100%">
-								<mx:Text text="Keywords:"/>
-								<mx:TextInput id="newKeywords" change="model.currentTicket.keywords = newKeywords.text" width="100%"/>		
-							</mx:HBox>
+							<mx:Spacer height="10"/>
+							<mx:Canvas height="25" width="100%">
+								<mx:Button id="submitTicket" label="Submit ticket" height="20" width="150" left="20" styleName="customButtonStyle"
+									 enabled="{newTicketSummary.text.length !=0 &amp;&amp; newDescription.text.length !=0}" click="submitNewTicket()"/>
+								<mx:Button id="cancelTicket" label="Cancel" height="20" width="150" right="20" click="renewView()" 
+									styleName="customButtonStyle"/>
+							</mx:Canvas>
 						</mx:VBox>
-						<mx:VRule top="5" bottom="5" height="100%" strokeColor="#000000"/>
-						<mx:VBox height="100%" width="100%" verticalGap="5">
-							<mx:HBox height="100%" width="100%">
-								<mx:Text text="Milestone:"/>
-								<mx:ComboBox id="newMilestoneBox" dataProvider="{model.milestones}" change="model.currentTicket.milestone = newMilestoneBox.selectedItem as String" 
-									dataChange="newMilestoneBox.selectedIndex = 0" />
-							</mx:HBox>
-							<mx:HBox height="100%" width="100%">
-								<mx:Text text="Version:"/>
-								<mx:ComboBox id="newVersionBox" dataProvider="{model.versions}" change="model.currentTicket.version = newVersionBox.selectedItem as String" 
-									dataChange="versionBox.selectedIndex = 0"/>
-							</mx:HBox>
-							<mx:HBox height="100%" width="100%">
-								<mx:Text text="Assign To:"/>
-								<mx:ComboBox id="newOwnerBox" dataProvider="{model.owners}" change="model.currentTicket.owner = newOwnerBox.selectedItem as String"/>
-							</mx:HBox>
-						</mx:VBox>
-					</mx:HBox>
-					<mx:Spacer height="10"/>
-					<mx:Canvas height="25" width="100%">
-						<mx:Button id="submitTicket" label="Submit ticket" height="20" width="150" left="20"
-							 enabled="{newTicketSummary.text.length !=0 &amp;&amp; newDescription.text.length !=0}" click="submitNewTicket()"/>
-						<mx:Button id="cancelTicket" label="Cancel" height="20" width="150" right="20" click="renewView()" x="{newTicketBox.width-cancelTicket.width}"/>
 					</mx:Canvas>
 				</mx:VBox>
 			</mx:VBox>
-			<mx:VBox label="Score Board" horizontalScrollPolicy="off" width="220">
-				<mx:Button label="Get Scores" click="calculateScores()"/>
+			<mx:VBox label="Score Board" horizontalScrollPolicy="off" width="240">
+				<mx:Spacer height="5"/>
+				<mx:Button label="Get Scores" click="calculateScores()" styleName="customButtonStyle"/>
 				<component:TracScoreBoard height="100%" width="100%" title="Scores"/>
 			</mx:VBox>
 		</mx:Accordion>
 		<mx:Canvas height="100%" width="100%" right="0">
-			<mx:Button id="refreshTickets" height="20" width="70" left="0" label="Refresh" click="updateTickets()"/>
-			<mx:Text text="{'Currently viewing ' + model.tickets.length + ' tickets'}" right="0"/>
+			<mx:Button id="refreshTickets" height="20" width="70" paddingTop="5" paddingLeft="5" paddingBottom="5" label="Refresh" 
+				styleName="customButtonStyle" click="updateTickets()"/>
+			<mx:Text text="{'Currently viewing ' + model.tickets.length + ' tickets'}" right="0" color="#CCCCCC"/>
 			<mx:VDividedBox height="100%" width="100%" top="20" dividerThickness="1">
 				<mx:VBox height="100%" width="100%">
 					<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="100%" width="100%" 
-							itemFocusIn="description.text = event.target.selectedItem.description" editable="true" rowHeight="25">
+							itemFocusIn="description.text = event.target.selectedItem.description" editable="true" rowHeight="25"
+							alternatingItemColors="[#333333,#555555]" headerColors="#444444" verticalGridLineColor="#666666"
+							borderColor="#222222" rollOverColor="#128FC9">
 						<component:columns>
-							<mx:DataGridColumn dataField="id" width="45" editable="false" sortCompareFunction="sortID"/>
+							<mx:DataGridColumn dataField="id" width="35" editable="false" sortCompareFunction="sortID" />
 							<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor" sortCompareFunction="sortSummary"/>				
 							<mx:DataGridColumn dataField="version" width="40" editable="false"/>			
 							<mx:DataGridColumn dataField="milestone" width="60" itemRenderer="com.effectiveui.view.editors.MilestoneEditor" rendererIsEditor="true"/>
@@ -327,14 +349,19 @@
 						</component:columns>
 					</component:TracDataGrid>
 				</mx:VBox>
-				<mx:TextArea id="description" height="40%" width="100%" change="editedItem = TracTicket(ticketGrid.selectedItem)" focusOut="updateDescription()"/>
+				<mx:Canvas	height="40%" width="100%" backgroundColor="#222222" borderThickness="2" borderColor="#000000">
+				<mx:TextArea id="description" height="100%" width="100%" backgroundColor="#60605C" color="#FFFFFF" cornerRadius="4"
+					top="5" bottom="5" right="10" left="10" borderColor="#000000"
+					change="editedItem = TracTicket(ticketGrid.selectedItem)" focusOut="updateDescription()"/>
+				</mx:Canvas>
 			</mx:VDividedBox>
 		</mx:Canvas>	
 	</mx:HBox>
-	<mx:Canvas height="100%" width="{width - dashboardAccordian.width}" right="0" visible="{!model.ticketsLoaded}" backgroundColor="0xFFFFFF">	
+	<mx:Canvas height="100%" width="{width - dashboardAccordian.width}" 
+		visible="{!model.ticketsLoaded}" backgroundColor="#999999" borderColor="#333333" cornerRadius="8" right="0">	
 		<mx:ProgressBar id="ticketProgress" label="{'Loading Tickets ' + ticketProgress.percentComplete.toPrecision(0) + '%'}" 
 			mode="{ProgressBarMode.MANUAL}" labelPlacement="center"
-			horizontalCenter="0" verticalCenter="0" fontSize="14" fontWeight="bold"/>		  
+			horizontalCenter="0" verticalCenter="0" fontSize="14" fontWeight="bold" color="#000000"/>		  
 	</mx:Canvas>
 	<util:Observe source="{model.numTicketsLoaded}" handler="{updateTicketProgress}"/>
 	<util:Observe source="{model.owners.length}" handler="{setOwner}"/>

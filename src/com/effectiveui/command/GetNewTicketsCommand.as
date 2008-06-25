@@ -3,39 +3,30 @@ package com.effectiveui.command
 	import com.adobe.cairngorm.commands.Command;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.effectiveui.component.TracTicket;
-	import com.effectiveui.event.GetComponentsEvent;
-	import com.effectiveui.event.GetTicketsEvent;
+	import com.effectiveui.event.GetNewTicketsEvent;
 	import com.effectiveui.model.TracModel;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
 	
 	import flash.events.Event;
 
-	public class GetTicketsCommand implements Command
+	public class GetNewTicketsCommand implements Command
 	{
-		protected var conn:ConnectionImpl;
 		protected var model:TracModel = TracModel.getInstance();
-
+		protected var conn:ConnectionImpl;		
+		
 		public function execute(event:CairngormEvent):void
 		{
-			//first we need to get the list of tickets for this user
 			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
-			model.currentTimeStamp = model.dateToISO();
-			if(GetTicketsEvent(event).owner && GetTicketsEvent(event).owner.length > 0){
-				conn.addParam("owner=" + GetTicketsEvent(event).owner +"&status!=closed", XMLRPCDataTypes.STRING);
-			} else {
-				conn.addParam("status!=closed", XMLRPCDataTypes.STRING);
-			}
+			var timeStamp:String = (event as GetNewTicketsEvent).timeStamp;
+			conn.addParam(timeStamp, XMLRPCDataTypes.DATETIME);
 			conn.addEventListener(Event.COMPLETE, handleTicketList);
-			model.ticketsLoaded = false;
-			model.numTicketsLoaded = 0;
-			conn.call("ticket.query");
-		}
-		
+			conn.call("ticket.getRecentChanges");
+		} 
+			
 		protected function handleTicketList(event:Event):void{
-			model.tickets.removeAll();
 			var ticketList:Array = (conn.getResponse() as Array);
-			model.ticketCount = ticketList.length;
+			model.ticketCount += ticketList.length;
 			if(model.ticketCount == 0)
 				model.ticketsLoaded = true;
 			var ticketRequestArray:Array = new Array();
@@ -65,6 +56,18 @@ package com.effectiveui.command
 					var ticket:TracTicket = new TracTicket();
 					ticket.id = tickets[i][0][0];
 					ticket.getFromTicketObject(tickets[i][0][3]);
+					
+					//check if its a new or just updated ticket
+					var oldTicket:TracTicket = new TracTicket();
+					for(var k:int=0;k<= model.tickets.length-1;k++)
+					{
+						oldTicket.id = model.tickets.getItemAt(k).id; 
+						if(ticket.id == oldTicket.id)
+						{
+							model.tickets.setItemAt(ticket,k);
+							return;
+						}
+					}
 					model.tickets.addItem(ticket);
 				}
 				model.numTicketsLoaded++;
@@ -73,9 +76,7 @@ package com.effectiveui.command
 				model.ticketsLoaded = true;
 				model.tickets.enableAutoUpdate();
 				model.tickets.refresh();
-				new GetComponentsEvent().dispatch(); //get components here because otherwise they don't load right sometimes 
 			}
 		}
-		
 	}
 }

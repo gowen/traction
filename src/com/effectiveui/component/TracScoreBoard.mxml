@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import com.effectiveui.model.TracModel;
+			
+			[Bindable]
+			private var model:TracModel = TracModel.getInstance();
+			
+		]]>
+	</mx:Script>
+	<mx:BarChart id="scoreChart" dataProvider="{model.scoreBoard}" width="100%" height="100%">
+		<mx:verticalAxis>
+			<mx:CategoryAxis
+				dataProvider="{model.scoreBoard}"
+				categoryField="owner"
+				ticksBetweenLabels="false"/>
+		</mx:verticalAxis>
+		<mx:series>
+			<mx:BarSeries                
+				yField="owner" 
+				xField="score" 
+				displayName="owner"/>
+		</mx:series>
+	</mx:BarChart>
+	<mx:DataGrid id="scoreDataGrid" dataProvider="{model.scoreBoard}" right="0" width="100%" 
+		alternatingItemColors="[#333333,#555555]" 
+		headerColors="#444444" verticalGridLineColor="#666666"
+		borderColor="#222222" rollOverColor="#128FC9">
+		<mx:columns>
+			<mx:DataGridColumn dataField="owner"/>
+			<mx:DataGridColumn dataField="score"/>
+		</mx:columns>
+	</mx:DataGrid>
+</mx:Panel>
