@@ -10,6 +10,9 @@ package com.effectiveui.command
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
 	
 	import flash.events.Event;
+	
+	import mx.collections.ArrayCollection;
+	import mx.collections.Sort;
 
 	public class GetTicketsCommand implements Command
 	{
@@ -33,7 +36,10 @@ package com.effectiveui.command
 		}
 		
 		protected function handleTicketList(event:Event):void{
-			model.tickets.removeAll();
+			var sort:Sort = model.tickets.sort;
+			model.tickets = new ArrayCollection();
+			model.tickets.sort = sort;
+			
 			var ticketList:Array = (conn.getResponse() as Array);
 			model.ticketCount = ticketList.length;
 			if(model.ticketCount == 0)
@@ -73,7 +79,6 @@ package com.effectiveui.command
 				model.ticketsLoaded = true;
 				model.tickets.enableAutoUpdate();
 				model.tickets.refresh();
-				new GetComponentsEvent().dispatch(); //get components here because otherwise they don't load right sometimes 
 			}
 		}
 		

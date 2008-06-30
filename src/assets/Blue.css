@@ -1,0 +1,36 @@
+/* CSS file */
+global
+{
+	 color: #FFFFFF;
+	 themeColor: #009DFF;
+}
+
+DataGrid
+{
+	rollOverColor: #0077AC;
+	selectionColor: #006499;
+}
+
+ComboBox
+{
+	rollOverColor: #0077AC;
+	selectionColor: #006499;
+}
+
+.gridCombos
+{
+	rollOverColor: #0077AC;
+	selectionColor: #006499;
+}
+
+.themeBox
+{
+	color: #0077AC;
+}
+
+.customButtonStyle {
+     fillColors: #0099CC, #006699;
+     fillAlphas: 1, 0.75;
+     fillColorRatios: 245, 250;
+}
+

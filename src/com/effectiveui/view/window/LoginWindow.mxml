@@ -68,6 +68,7 @@
 					new GetResolutionsEvent().dispatch();
 					new GetStatusesEvent().dispatch();
 					new GetVersionsEvent().dispatch();
+					new GetComponentsEvent().dispatch();
 					new GetTypesEvent().dispatch();
 					new GetOwnersEvent().dispatch();
 					new GetTicketsEvent(model.username).dispatch();

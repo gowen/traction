@@ -31,9 +31,9 @@ package com.effectiveui.model
 	                ((d.getUTCHours()< 10)?'0':'') + d.getUTCHours() +':'+
 	                ((d.getUTCMinutes()< 10)?'0':'') + d.getUTCMinutes() +':'+
 	                ((d.getUTCSeconds()< 10)?'0':'') + d.getUTCSeconds();
-        iso = iso.substring(0, iso.length-0);
-        return iso;
-    }
+        	iso = iso.substring(0, iso.length-0);
+        	return iso;
+    	}
 		
 		public var username:String;
 		public var password:String;
@@ -52,7 +52,8 @@ package com.effectiveui.model
 		public var ticketCount:Number;
 		public var numTicketsLoaded:Number = 0;;
 		public var loggedIn:Boolean = false;
-		public var currentTimeStamp:String = new String();
+		public var currentTimeStamp:String = dateToISO();
+		public var themes:Array = ["blue", "green", "orange", "pink", "silver"];
 		
 		public var scoreBoard:ArrayCollection = new ArrayCollection();
 		

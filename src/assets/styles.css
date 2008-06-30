@@ -1,26 +1,27 @@
 /* CSS file */
 global
 {
-	 color: #FFFFFF;
+	 color: #DDDDDD;
 }
 
 DataGrid
 {
 	header-separator-skin: ClassReference("assets.headerSeperatorSkin");
-	textRollOverColor: #000000;
-	selectionColor: #006699;
-	textSelectedColor: #000000;
+	textRollOverColor: #FFFFFF;
+	rollOverColor: #0077AC;
+	selectionColor: #006499;
+	textSelectedColor: #FFFFFF;
 }
 
 ComboBox
 {
 	alternatingItemColors:#333333,#555555;
 	color:#FFFFFF;
-	rollOverColor: #128FC9;
-	selectionColor: #006699;
+	rollOverColor: #0077AC;
+	selectionColor: #006499;
 	textRollOverColor: #FFFFFF;
 	textSelectedColor: #000000;
-	fillColors: #666666,#585858;
+	fillColors: #666666,#565656;
 	fillAlphas: 1.0, 1.0;
 	borderColor: #333333;
 }
@@ -29,8 +30,8 @@ ComboBox
 {
 	alternatingItemColors:#333333,#555555;
 	color:#FFFFFF;
-	rollOverColor: #128FC9;
-	selectionColor: #006699;
+	rollOverColor: #0077AC;
+	selectionColor: #006499;
 	textRollOverColor: #000000;
 	textSelectedColor: #FFFFFF;
 }
@@ -56,13 +57,16 @@ BarChart
 	fillColors: #333333, #000000;
 	selectedFillAlphas: 1.0, 1.0;
 	selectedFillColors: #333333, #000000;
-	textRollOverColor: #CCCCCC;
-	textSelectedColor: #128FC9;
+	textRollOverColor: #FFFFFF;
+	textSelectedColor: #FFFFFF;
 	borderColor: #333333;
 
 }
 
-
+.themeBox
+{
+	color: #0077AC;
+}
 
 .customButtonStyle {
      cornerRadii: 7, 7, 7, 7;

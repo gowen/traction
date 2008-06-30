@@ -20,7 +20,7 @@ package com.effectiveui.command
 		}
 		
 		protected function handleMilestoneReturn(event:Event):void{
-			model.components.removeAll();
+			model.milestones.removeAll();
 			model.milestones.addItemAt(model.NO_VALUE, 0);
 			var milestones:Array = (conn.getResponse() as Array);
 			for each(var milestone:String in milestones){

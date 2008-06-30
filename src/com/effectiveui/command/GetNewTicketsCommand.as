@@ -27,7 +27,7 @@ package com.effectiveui.command
 		protected function handleTicketList(event:Event):void{
 			var ticketList:Array = (conn.getResponse() as Array);
 			model.ticketCount += ticketList.length;
-			if(model.ticketCount == 0)
+			if(ticketList.length == 0)
 				model.ticketsLoaded = true;
 			var ticketRequestArray:Array = new Array();
 			
@@ -49,30 +49,38 @@ package com.effectiveui.command
 		} 
 		
 		protected function handleTicketsReturn(event:Event):void{
+			var updated:Boolean = false;
 			var tickets:Array = ((event.target as ConnectionImpl).getResponse() as Array);			
 			model.tickets.disableAutoUpdate();			
-			for(var i:int = 0; i < tickets.length; i++){
-				if(tickets[i][0].length >= 4){					
+			for(var i:int = 0; i < tickets.length; i++)
+			{
+				if(tickets[i][0].length >= 4)
+				{					
 					var ticket:TracTicket = new TracTicket();
 					ticket.id = tickets[i][0][0];
 					ticket.getFromTicketObject(tickets[i][0][3]);
 					
 					//check if its a new or just updated ticket
 					var oldTicket:TracTicket = new TracTicket();
-					for(var k:int=0;k<= model.tickets.length-1;k++)
+					for(var k:int=0;k< model.tickets.length && !updated;k++)
 					{
+						updated = false;
 						oldTicket.id = model.tickets.getItemAt(k).id; 
 						if(ticket.id == oldTicket.id)
 						{
-							model.tickets.setItemAt(ticket,k);
-							return;
+							model.tickets.removeItemAt(k);
+							model.ticketCount--;
+							updated = true;
 						}
 					}
-					model.tickets.addItem(ticket);
+						model.tickets.addItem(ticket);
 				}
-				model.numTicketsLoaded++;
+				if(!updated)
+					model.numTicketsLoaded++;
+				trace("NumTickets: " + model.numTicketsLoaded + " TicketCount: " + model.ticketCount);
 			}			
 			if(model.numTicketsLoaded == model.ticketCount){
+				trace("ticketCount = numTicketsLoaded");
 				model.ticketsLoaded = true;
 				model.tickets.enableAutoUpdate();
 				model.tickets.refresh();
