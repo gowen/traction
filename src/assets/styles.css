@@ -6,7 +6,7 @@ global
 
 DataGrid
 {
-	header-separator-skin: ClassReference("assets.headerSeperatorSkin");
+	header-separator-skin: ClassReference("com.effectiveui.skins.TracHeaderSeperatorSkin");
 	textRollOverColor: #FFFFFF;
 	rollOverColor: #0077AC;
 	selectionColor: #006499;

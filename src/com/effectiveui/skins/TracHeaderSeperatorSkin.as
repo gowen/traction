@@ -1,11 +1,11 @@
-package assets
+package com.effectiveui.skins
 {
 	import mx.skins.ProgrammaticSkin;
 	import flash.display.Graphics;
 
-	public class headerSeperatorSkin extends ProgrammaticSkin
+	public class TracHeaderSeperatorSkin extends ProgrammaticSkin
 	{
-		public function headerSeperatorSkin()
+		public function TracHeaderSeperatorSkin()
 		{
 			super();
 		}
