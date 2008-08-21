@@ -2,7 +2,10 @@
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="1300"
 	creationComplete="launchLogin()" visible="false" frameRate="30" 
 	xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0" 
-	xmlns:component="com.effectiveui.component.*" xmlns:util="com.effectiveui.util.*">
+	xmlns:component="com.effectiveui.component.*"
+	xmlns:editor="com.effectiveui.view.editors.*" 
+	xmlns:util="com.effectiveui.util.*">
+	
 	<control:TracUIController id="controller"/>
 	<mx:Script>
 		<![CDATA[
@@ -19,7 +22,9 @@
 			import com.effectiveui.model.TracModel;			
 			
 			[Bindable]
-			private var model:TracModel = TracModel.getInstance();						
+			private var model:TracModel = TracModel.getInstance();
+			private var detailsOpen:Boolean = false;
+			private var firstTime:Boolean = true;						
 			
 			protected function launchLogin():void{
 				var login:LoginWindow = new LoginWindow();
@@ -102,7 +107,8 @@
 					}
 				}
 				return true;
-			}
+				model.tickets.refresh();
+			}	
 			
 			protected var editedItem:TracTicket;
 			protected function updateDescription():void{
@@ -114,6 +120,7 @@
 			}
 			
 			protected function submitNewTicket():void{
+				model.currentTicket.reporter = model.username;
 				new CreateNewTicketEvent(model.currentTicket).dispatch();
 				renewView();
 				clearNewTicketCreator();
@@ -199,6 +206,36 @@
 					dashboardAccordian.width = 240;
 			}
 			
+			protected function initializeGrid(ticket:TracTicket):void{
+				model.currentViewTicket = ticket;
+				dataGridFocusInResize();
+			}
+			
+			protected function dataGridFocusInResize():void
+			{
+				if(firstTime == true)
+				{
+					ticketDetails.percentHeight=100;
+					ticketDetails.width=250;
+					firstTime=false;
+					detailsToggle.selected=false;
+					detailsOpen = true;
+				}
+			}
+			
+			protected function hideOrShowDetails():void{
+				if(detailsOpen){
+					ticketDetails.width=22;
+					ticketDetails.height=20;
+					detailsOpen = false;
+				}
+				else{
+					ticketDetails.percentHeight=100;
+					ticketDetails.width=250;
+					detailsOpen=true;
+				}
+			}
+			
 			protected function getNewTheme(index:int):void{
 				switch(index){
 					case 0:
@@ -223,10 +260,10 @@
 		]]>
 	</mx:Script>
 	<mx:Style source="assets/styles.css"/>
-	<mx:Resize id="resizeNewTicket" duration="700"/>
+	<mx:Resize id="resizeWindows" duration="700"/>
 	<mx:HBox height="100%" width="100%" horizontalGap="0" backgroundColor="#000000">
 		<mx:Accordion id="dashboardAccordian" height="100%" width="240" borderColor="#222222" backgroundColor="#111111"
-			click="hideOrShowCreateNew()" resizeEffect="{resizeNewTicket}" headerStyleName="accordionHeader">
+			click="hideOrShowCreateNew()" resizeEffect="{resizeWindows}" headerStyleName="accordionHeader">
 			<mx:VBox id="filterList" label="Filters" width="100%" height="100%" 
 				paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" verticalGap="0">
 				<mx:Canvas height="100%" width="100%"
@@ -338,7 +375,7 @@
 					</mx:Canvas>
 				</mx:VBox>
 			</mx:VBox>
-			<mx:VBox label="Score Board" horizontalScrollPolicy="off" width="240">
+			<mx:VBox label="Score Board" horizontalScrollPolicy="off" width="240" click="calculateScores()">
 				<mx:Spacer height="5"/>
 				<mx:Button label="Get Scores" click="calculateScores()" styleName="customButtonStyle"/>
 				<component:TracScoreBoard height="100%" width="100%" title="Scores"/>
@@ -355,31 +392,59 @@
 				</mx:HBox>
 			</mx:VBox>
 			<mx:VDividedBox height="100%" width="100%" top="40" dividerThickness="1">
-				<mx:VBox height="100%" width="100%">
-					<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="100%" width="100%" 
-							itemFocusIn="description.text = event.target.selectedItem.description" editable="true" rowHeight="25"
-							alternatingItemColors="[#333333,#555555]" headerColors="#444444" verticalGridLineColor="#666666"
-							borderColor="#222222">
-						<component:columns>
-							<mx:DataGridColumn dataField="id" width="35" editable="false" sortCompareFunction="sortID" />
-							<mx:DataGridColumn dataField="summary" minWidth="280" itemEditor="com.effectiveui.view.editors.SummaryEditor" sortCompareFunction="sortSummary" />				
-							<mx:DataGridColumn dataField="version" width="40" editable="false" dataTipField="label"/>			
-							<mx:DataGridColumn dataField="milestone" width="60" itemRenderer="com.effectiveui.view.editors.MilestoneEditor" rendererIsEditor="true" />
-							<mx:DataGridColumn dataField="owner" minWidth="55" itemRenderer="com.effectiveui.view.editors.OwnerEditor" rendererIsEditor="true" />
-							<mx:DataGridColumn dataField="resolution" minWidth="60" itemRenderer="com.effectiveui.view.editors.ResolutionEditor" rendererIsEditor="true" />				
-							<mx:DataGridColumn dataField="component" minWidth="55" itemRenderer="com.effectiveui.view.editors.ComponentEditor" rendererIsEditor="true"/>												
-							<mx:DataGridColumn dataField="priority" minWidth="50" itemRenderer="com.effectiveui.view.editors.PriorityEditor" rendererIsEditor="true" />
-							<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor" />			
-							<mx:DataGridColumn dataField="reporter" minWidth="70" itemEditor="com.effectiveui.view.editors.ReporterEditor" />				
-							<mx:DataGridColumn dataField="type" minWidth="80" itemRenderer="com.effectiveui.view.editors.TypeEditor" rendererIsEditor="true" />
-							<mx:DataGridColumn dataField="status" minWidth="50" itemRenderer="com.effectiveui.view.editors.StatusEditor" rendererIsEditor="true" />							
-						</component:columns>
-					</component:TracDataGrid>
-				</mx:VBox>
+				<mx:HBox width="100%" height="100%" horizontalGap="1">
+					<mx:VBox height="100%" width="100%">
+						<component:TracDataGrid id="ticketGrid" dataProvider="{model.tickets}" height="100%" width="100%" 
+								itemFocusIn="initializeGrid(event.target.selectedItem)" editable="true" rowHeight="25"
+								alternatingItemColors="[#333333,#555555]" headerColors="#444444" verticalGridLineColor="#666666"
+								borderColor="#222222">
+							<component:columns>
+								<mx:DataGridColumn dataField="id" width="35" editable="false" sortCompareFunction="sortID"/>
+								<mx:DataGridColumn dataField="type" minWidth="75" itemRenderer="com.effectiveui.view.editors.TypeEditor" rendererIsEditor="true"/>
+								<mx:DataGridColumn dataField="summary" minWidth="250" itemEditor="com.effectiveui.view.editors.SummaryEditor" sortCompareFunction="sortSummary"/>				
+								<mx:DataGridColumn dataField="component" minWidth="65" itemRenderer="com.effectiveui.view.editors.ComponentEditor" rendererIsEditor="true"/>												
+								<mx:DataGridColumn dataField="priority" minWidth="45" itemRenderer="com.effectiveui.view.editors.PriorityEditor" rendererIsEditor="true"/>
+								<mx:DataGridColumn dataField="status" minWidth="50" itemRenderer="com.effectiveui.view.editors.StatusEditor" rendererIsEditor="true"/>							
+								<mx:DataGridColumn dataField="resolution" minWidth="60" itemRenderer="com.effectiveui.view.editors.ResolutionEditor" rendererIsEditor="true"/>				
+								<mx:DataGridColumn dataField="owner" minWidth="55" itemRenderer="com.effectiveui.view.editors.OwnerEditor" rendererIsEditor="true"/>
+								<mx:DataGridColumn dataField="milestone" minWidth="80" itemRenderer="com.effectiveui.view.editors.MilestoneEditor" rendererIsEditor="true"/>
+							</component:columns>
+						</component:TracDataGrid>
+					</mx:VBox>
+					<mx:Canvas id="ticketDetails" height="20" width="22" resizeEffect="{resizeWindows}" right="0">
+						<mx:Button id="detailsToggle" height="20" width="20" right="2" styleName="customButtonStyle" 
+							toggle="true"
+							selected="true"
+							upIcon="@Embed('/assets/icons/Icon_minus.png')"
+							overIcon="@Embed('/assets/icons/Icon_minus.png')"
+							downIcon="@Embed('/assets/icons/Icon_minus.png')"
+						 	selectedUpIcon="@Embed('/assets/icons/Icon_plus.png')"
+						 	selectedOverIcon="@Embed('/assets/icons/Icon_plus.png')"
+							selectedDownIcon="@Embed('/assets/icons/Icon_plus.png')"
+							click="hideOrShowDetails()"/>
+						<mx:Text text="{'Ticket ' + model.currentViewTicket.id + ' Details:'}" fontSize="12" left="0" top="15"/>
+						<mx:VBox height="100%" width="100%" top="20" verticalGap="0" paddingLeft="5">
+						<mx:Spacer height="10"/>
+						<mx:Spacer height="10"/>
+							<mx:HBox width="100%" horizontalGap="0">
+								<mx:Text text="Version: "/>
+								<mx:Text text="{model.currentViewTicket.version}"/>
+							</mx:HBox>
+							<mx:Spacer height="10"/>
+							<mx:Text text="Reporter:"/>
+							<editor:ReporterEditor width="95%" text="{model.currentViewTicket.reporter}"/>
+							<mx:Spacer height="10"/>
+							<mx:Text text="Keywords:"/>
+							<editor:KeywordEditor height="40%" width="95%" text="{model.currentViewTicket.keywords}"/>
+							<mx:Spacer height="10"/>
+						</mx:VBox>
+					</mx:Canvas>
+				</mx:HBox>
 				<mx:Canvas	height="40%" width="100%" backgroundColor="#222222" borderThickness="2" borderColor="#000000">
-				<mx:TextArea id="description" height="100%" width="100%" backgroundColor="#60605C" color="#FFFFFF" cornerRadius="4"
-					top="5" bottom="5" right="10" left="10" borderColor="#000000"
-					change="editedItem = TracTicket(ticketGrid.selectedItem)" focusOut="updateDescription()"/>
+					<mx:Text text="Full description: " top="0" left="5"/>
+					<mx:TextArea id="description" height="100%" width="100%" backgroundColor="#60605C" color="#FFFFFF" cornerRadius="4"
+						top="15" bottom="15" right="5" left="5" borderColor="#000000" text="{model.currentViewTicket.description}"
+						change="editedItem = TracTicket(ticketGrid.selectedItem)" focusOut="updateDescription()"/>
 				</mx:Canvas>
 			</mx:VDividedBox>
 		</mx:Canvas>	

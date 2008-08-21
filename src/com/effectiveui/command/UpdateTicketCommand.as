@@ -36,7 +36,6 @@ package com.effectiveui.command
 				ticket.priority = "";
 			}
 			
-		//	model.tickets.refresh();
 			
 			var conn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);			
 			var comment:String = " ";
@@ -44,6 +43,7 @@ package com.effectiveui.command
 			conn.addParam(comment, XMLRPCDataTypes.STRING);
 			conn.addParam(ticket.toObject(), XMLRPCDataTypes.STRUCT);			
 			conn.call("ticket.update"); 
+			model.tickets.refresh();
 		}
 		
 	}

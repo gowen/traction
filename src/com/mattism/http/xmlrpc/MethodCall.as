@@ -9,7 +9,7 @@
 
 package com.mattism.http.xmlrpc
 {
-	public interface MethodCall
+	interface MethodCall
 	{
 		
 		function setName( name:String ):void;
