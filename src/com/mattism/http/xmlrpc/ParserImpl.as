@@ -13,7 +13,7 @@ package com.mattism.http.xmlrpc
 	import com.mattism.http.xmlrpc.util.XMLRPCUtils;
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
 	
-	class ParserImpl
+	public class ParserImpl
 	implements Parser {
 		
 		// Metadata
