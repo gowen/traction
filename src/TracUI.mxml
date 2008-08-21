@@ -75,8 +75,8 @@
 				if(keywordFilter.text && keywordFilter.text.length > 0){
 					var keywords:Array = keywordFilter.text.split(" ");
 					var keywordData:String = (data.keywords as String).toLowerCase();
-					for each(var word:String in keywords){
-						if(keywordData.indexOf(word) == -1){
+					for each(var keyword:String in keywords){
+						if(keywordData.indexOf(keyword) == -1){
 							return false;
 						}
 					}
