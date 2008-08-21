@@ -7,13 +7,8 @@
 			import com.effectiveui.component.TracTicket;
 			import com.effectiveui.event.UpdateTicketEvent;
 			import com.effectiveui.model.TracModel;
-			
-			private var model:TracModel = TracModel.getInstance();
-			
-			
 			protected function updateTicket():void{
-				if(this.selectedItem != data.milestone)
-				{
+				if(this.selectedItem != data.milestone){
 					data.milestone = this.selectedItem;
 					new UpdateTicketEvent(TracTicket(data)).dispatch();
 				}

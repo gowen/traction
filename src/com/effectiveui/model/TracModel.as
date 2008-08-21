@@ -39,7 +39,6 @@ package com.effectiveui.model
 		public var password:String;
 		public var serverURL:String;
 		public var currentTicket:TracTicket = new TracTicket();
-		public var currentViewTicket:TracTicket = new TracTicket();
 		public var tickets:ArrayCollection = new ArrayCollection();
 		public var milestones:ArrayCollection = new ArrayCollection();
 		public var components:ArrayCollection = new ArrayCollection();

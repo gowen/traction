@@ -10,7 +10,7 @@
 		<mx:VBox left="100" top="25">
 			<mx:TextInput id="uname" enabled="{!loggingIn}"/>
 			<mx:TextInput id="pass" displayAsPassword="true" enabled="{!loggingIn}"/>
-			<mx:TextInput text="https://effectiveui-trac.cvsdude.com/TaskManagement" id="serverURL" enabled="{!loggingIn}"/>
+			<mx:TextInput text="&lt; enter Trac URL here >" id="serverURL" enabled="{!loggingIn}"/>
 		</mx:VBox>		
 		<mx:HBox bottom="30" horizontalCenter="0">
 			<mx:Button label="Submit" click="login()" styleName="customButtonStyle" />

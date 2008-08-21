@@ -3,7 +3,6 @@ package com.effectiveui.command
 	import com.adobe.cairngorm.commands.Command;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.effectiveui.component.TracTicket;
-	import com.effectiveui.event.GetComponentsEvent;
 	import com.effectiveui.event.GetTicketsEvent;
 	import com.effectiveui.model.TracModel;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
@@ -37,8 +36,10 @@ package com.effectiveui.command
 		
 		protected function handleTicketList(event:Event):void{
 			var sort:Sort = model.tickets.sort;
+			var filter:Function = model.tickets.filterFunction;
 			model.tickets = new ArrayCollection();
 			model.tickets.sort = sort;
+			model.tickets.filterFunction = filter;
 			
 			var ticketList:Array = (conn.getResponse() as Array);
 			model.ticketCount = ticketList.length;
