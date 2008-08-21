@@ -222,7 +222,7 @@
 			
 		]]>
 	</mx:Script>
-	<mx:Style source="assets/styles.css"/>
+	<mx:Style source="styles.css"/>
 	<mx:Resize id="resizeNewTicket" duration="700"/>
 	<mx:HBox height="100%" width="100%" horizontalGap="0" backgroundColor="#000000">
 		<mx:Accordion id="dashboardAccordian" height="100%" width="240" borderColor="#222222" backgroundColor="#111111"
