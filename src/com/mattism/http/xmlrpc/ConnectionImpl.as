@@ -90,6 +90,7 @@ package com.mattism.http.xmlrpc
 				request.data = this._method.getXml();
 				request.method = URLRequestMethod.POST;
 				request.url = this.getUrl();
+				request.authenticate = false;
 				if(_username && _password){
 					var authData:Base64Encoder = new Base64Encoder();
 					authData.encode(_username + ':' + _password);
