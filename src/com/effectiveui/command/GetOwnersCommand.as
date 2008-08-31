@@ -3,15 +3,39 @@ package com.effectiveui.command
 	import com.adobe.cairngorm.commands.Command;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.effectiveui.model.TracModel;
-	import com.mattism.http.xmlrpc.ConnectionImpl;
-	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
 	
-	import flash.events.Event;
+	import flash.data.SQLResult;
+	import flash.data.SQLStatement;
+	import flash.events.SQLEvent;
 
 	public class GetOwnersCommand implements Command
 	{
 		protected var model:TracModel = TracModel.getInstance();
-		protected var conn:ConnectionImpl;
+	
+		public function execute(event:CairngormEvent):void{
+			if(!model.dbConnection || !model.dbConnection.connected){
+				return;
+			}
+			
+			var stmt:SQLStatement = new SQLStatement();
+			stmt.sqlConnection = model.dbConnection;
+			stmt.text = "SELECT DISTINCT owner FROM tickets";
+			stmt.addEventListener(SQLEvent.RESULT, handleSQLReturn);
+			stmt.execute();
+		}
+		
+		public function handleSQLReturn(event:SQLEvent):void{
+			var results:SQLResult = SQLStatement(event.target).getResult();
+			if(results && results.data && results.data.length > 0){
+				for each (var entry:Object in results.data){
+					if(!model.owners.contains(entry.owner)){
+						model.owners.addItem(entry.owner);
+					}
+				}
+			}
+		}
+	
+	/*	protected var conn:ConnectionImpl;
 		public function execute(event:CairngormEvent):void{		
 			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
 			conn.addParam("CurrentUsers", XMLRPCDataTypes.STRING);
@@ -34,6 +58,6 @@ package com.effectiveui.command
 			if(!model.owners.contains(model.username)){
 				model.owners.addItem(model.username);
 			}
-		}
+		}*/
 	}
 }
