@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component:TracComboBox xmlns:component="com.effectiveui.component.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
-	dataProvider="{TracModel.getInstance().resolutions}" selectedIndex="{getResolutionIndex(TracTicket(data).resolution)}"
+	dataProvider="{TracModel.getInstance().resolutions}" selectedIndex="{TracModel.getInstance().resolutions.getItemIndex(data.resolution.toString())}"
 	change="updateTicket()" xmlns:util="com.effectiveui.util.*" dropdownWidth="95">
 	<mx:Script>
 		<![CDATA[

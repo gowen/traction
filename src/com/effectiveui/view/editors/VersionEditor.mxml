@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component:TracComboBox xmlns:component="com.effectiveui.component.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
 	dataProvider="{TracModel.getInstance().versions}"
+	selectedIndex="{TracModel.getInstance().versions.getItemIndex(data.version.toString())}"
 	change="updateTicket()">
 	<mx:Script>
 		<![CDATA[
