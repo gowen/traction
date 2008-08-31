@@ -4,7 +4,9 @@ package com.effectiveui.command
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.effectiveui.component.TracTicket;
 	import com.effectiveui.event.GetNewTicketsEvent;
+	import com.effectiveui.event.GetOwnersEvent;
 	import com.effectiveui.model.TracModel;
+	import com.effectiveui.util.IOUtil;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
 	
@@ -54,6 +56,7 @@ package com.effectiveui.command
 			model.tickets.disableAutoUpdate();			
 			for(var i:int = 0; i < tickets.length; i++)
 			{
+				updated = false;									
 				if(tickets[i][0].length >= 4)
 				{					
 					var ticket:TracTicket = new TracTicket();
@@ -61,19 +64,18 @@ package com.effectiveui.command
 					ticket.getFromTicketObject(tickets[i][0][3]);
 					
 					//check if its a new or just updated ticket
-					var oldTicket:TracTicket = new TracTicket();
 					for(var k:int=0;k< model.tickets.length && !updated;k++)
 					{
-						updated = false;
-						oldTicket.id = model.tickets.getItemAt(k).id; 
-						if(ticket.id == oldTicket.id)
+						var id:String = model.tickets.getItemAt(k).id; 
+						if(ticket.id == id)
 						{
 							model.tickets.removeItemAt(k);
 							model.ticketCount--;
 							updated = true;
 						}
 					}
-						model.tickets.addItem(ticket);
+					model.tickets.addItem(ticket);
+					IOUtil.addTicketToDB(ticket);
 				}
 				if(!updated)
 					model.numTicketsLoaded++;
@@ -84,6 +86,7 @@ package com.effectiveui.command
 				model.ticketsLoaded = true;
 				model.tickets.enableAutoUpdate();
 				model.tickets.refresh();
+				new GetOwnersEvent().dispatch();
 			}
 		}
 	}

@@ -3,6 +3,8 @@ package com.effectiveui.model
 	import com.adobe.cairngorm.model.ModelLocator;
 	import com.effectiveui.component.TracTicket;
 	
+	import flash.data.SQLConnection;
+	
 	import mx.collections.ArrayCollection;
 
 	[Bindable]
@@ -23,8 +25,13 @@ package com.effectiveui.model
 		}
 		
 		//converts the current date timestamp to an .Iso86 format
-		public function dateToISO():String {
-			var d:Date = new Date();
+		public function dateToISO(time:Number = NaN):String {
+			var d:Date;
+			if(isNaN(time)){
+				d = new Date();
+			} else {
+				d = new Date(time);
+			}
 	        var iso:String = d.getUTCFullYear() +
 	                ((d.getUTCMonth()+1 < 10)?'0':'') + (d.getUTCMonth()+1) +
 	                ((d.getUTCDate() < 10)?'0':'') + d.getUTCDate()+'T'+
@@ -49,17 +56,19 @@ package com.effectiveui.model
 		public var types:ArrayCollection = new ArrayCollection();
 		public var owners:ArrayCollection = new ArrayCollection();
 		public var ticketsLoaded:Boolean = false;
-		public var ticketCount:Number;
+		public var ticketCount:Number = 0;
 		public var numTicketsLoaded:Number = 0;;
 		public var loggedIn:Boolean = false;
-		public var currentTimeStamp:String = dateToISO();
+		public var currentTimeStamp:Number;
 		public var themes:Array = ["blue", "green", "orange", "pink", "silver"];
 		
 		public var scoreBoard:ArrayCollection = new ArrayCollection();
 		
 		public const NO_VALUE:String = "";
 		
-		
+		public var sync:Boolean = false; //indicates whether we are keeping the local copy in sync with the server
+		public var dbConnection:SQLConnection;
+		public var firstSync:Boolean = false; //indicates whether we are currently syncing for the first time
 	}
 	
 	

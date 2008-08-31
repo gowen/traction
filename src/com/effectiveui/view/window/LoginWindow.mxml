@@ -18,6 +18,10 @@
 		</mx:HBox>	
 		<mx:Script>
 			<![CDATA[
+				import com.effectiveui.util.IOUtil;
+				import com.effectiveui.event.GetNewTicketsEvent;
+				import com.effectiveui.command.GetTicketsCommand;
+				import com.effectiveui.event.UpdateTicketEvent;
 				import com.mattism.http.xmlrpc.ConnectionImpl;
 				import com.effectiveui.event.GetOwnersEvent;
 				import com.effectiveui.event.GetTypesEvent;
@@ -62,7 +66,40 @@
 				
 				protected function handleLogin(event:Event):void{		
 					trace("logged in successfully");
-															
+					model.dbConnection = new SQLConnection();
+					model.dbConnection.addEventListener(SQLEvent.OPEN, createDBSchema);
+					model.dbConnection.addEventListener(SQLErrorEvent.ERROR, continueLogin);
+					if(!File.applicationStorageDirectory.resolvePath(model.username).exists){
+						File.applicationStorageDirectory.resolvePath(model.username).createDirectory();
+					}
+					model.dbConnection.openAsync(File.applicationStorageDirectory.resolvePath(model.username).resolvePath('cache.db'));
+				}
+				
+				protected function createDBSchema(event:Event):void{
+					model.dbConnection.removeEventListener(SQLEvent.OPEN, createDBSchema);
+					var createStmt:SQLStatement = new SQLStatement();
+					createStmt.sqlConnection = model.dbConnection;
+					createStmt.text = "CREATE TABLE IF NOT EXISTS tickets(" +
+									"	id TEXT PRIMARY KEY, " +
+									"	summary TEXT, " +
+									" 	description TEXT," +
+									"	version TEXT, " +
+									"	milestone TEXT, " +
+									"	owner TEXT," +
+									"   resolution TEXT," +
+									"	component TEXT," +
+									"	priority TEXT," +
+									"	keywords TEXT," +
+									"	reporter TEXT," +
+									"	type TEXT," +
+									" 	status TEXT" +
+									")";
+					createStmt.addEventListener(SQLEvent.RESULT, continueLogin);
+					createStmt.addEventListener(SQLErrorEvent.ERROR, continueLogin);
+					createStmt.execute();	
+				}
+				
+				protected function continueLogin(event:Event):void{								
 					new GetMilestonesEvent().dispatch();				
 					new GetPrioritiesEvent().dispatch();
 					new GetResolutionsEvent().dispatch();
@@ -70,8 +107,19 @@
 					new GetVersionsEvent().dispatch();
 					new GetComponentsEvent().dispatch();
 					new GetTypesEvent().dispatch();
-					new GetOwnersEvent().dispatch();
-					new GetTicketsEvent(model.username).dispatch();
+					//new GetOwnersEvent().dispatch();
+					if(File.applicationStorageDirectory.resolvePath(model.username).resolvePath('lastUpdated.dat').exists && model.dbConnection.connected && !(event is SQLErrorEvent)){
+						model.sync = true;
+						var lastTime:Number = IOUtil.readTime();
+						model.currentTimeStamp = lastTime;
+						IOUtil.loadAllTickets();																								
+					} else if(!model.dbConnection.connected || event is SQLErrorEvent){
+						//if the db connection errored then just work locally
+						new GetTicketsEvent(GetTicketsEvent.GET_ACTIVE).dispatch();
+					} else{
+						model.firstSync = true;
+						new GetTicketsEvent(GetTicketsEvent.GET_ALL).dispatch();
+					}
 					
 					if(store.selected){
 						storeLoginInfo();

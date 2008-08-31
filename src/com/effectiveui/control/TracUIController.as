@@ -42,7 +42,8 @@ package com.effectiveui.control
 			addCommand(GetPrioritiesEvent.GET_PRIORITIES, GetPrioritiesCommand);
 			addCommand(GetResolutionsEvent.GET_RESOLUTIONS, GetResolutionsCommand);
 			addCommand(GetStatusesEvent.GET_STATUSES, GetStatusesCommand);
-			addCommand(GetTicketsEvent.GET_TICKETS, GetTicketsCommand);
+			addCommand(GetTicketsEvent.GET_ACTIVE, GetTicketsCommand);
+			addCommand(GetTicketsEvent.GET_ALL, GetTicketsCommand);
 			addCommand(GetVersionsEvent.GET_VERSIONS, GetVersionsCommand);
 			addCommand(GetTypesEvent.GET_TYPES, GetTypesCommand);
 			addCommand(GetOwnersEvent.GET_OWNERS, GetOwnersCommand);

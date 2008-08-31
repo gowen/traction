@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="1300"
-	creationComplete="launchLogin()" visible="false" frameRate="30" 
+	creationComplete="launchLogin()" visible="false" frameRate="30" closing="if(model.sync)IOUtil.saveTime(model.currentTimeStamp)" 
 	xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0" 
 	xmlns:component="com.effectiveui.component.*" xmlns:util="com.effectiveui.util.*">
 	<control:TracUIController id="controller"/>
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.util.IOUtil;
 			import com.effectiveui.event.GetNewTicketsEvent;
 			import com.effectiveui.event.GetScoresEvent;
 			import com.effectiveui.component.TracTicket;
@@ -54,6 +55,11 @@
 						}
 					}					
 					if((summaryCount <= 0 || (summaryCount/filterWords.length)*10 < 7) && (descCount <= 0 || (descCount/filterWords.length)*10 < 7)){
+						return false;
+					}
+				}
+				if(ownerBox.selectedIndex != 0 && ownerBox.selectedItem){
+					if(data.owner.toString() != ownerBox.selectedItem.toString()){
 						return false;
 					}
 				}
@@ -122,8 +128,8 @@
 			}
 			
 			protected function updateTickets():void{
-				new GetNewTicketsEvent(model.currentTimeStamp).dispatch();
-				model.currentTimeStamp = model.dateToISO();
+				new GetNewTicketsEvent(model.dateToISO(model.currentTimeStamp)).dispatch();
+				model.currentTimeStamp = new Date().time;
 				model.tickets.refresh();
 			}
 			
@@ -182,11 +188,11 @@
 				getTickets.dispatch();
 			}
 			
-			protected function setOwner():void{
+		/*	protected function setOwner():void{
 				if(model.owners.contains(model.username)){
 					ownerBox.selectedIndex = model.owners.getItemIndex(model.username);					
 				}
-			}
+			} */
 			
 			protected function calculateScores():void{
 				new GetScoresEvent().dispatch();
@@ -246,7 +252,7 @@
 						<mx:ComboBox id="milestoneBox" dataProvider="{model.milestones}" change="model.tickets.refresh()" dataChange="milestoneBox.selectedIndex = 0"/>
 						<mx:Spacer height="10"/>		
 						<mx:Text text="Owner:"/>
-						<mx:ComboBox id="ownerBox" dataProvider="{model.owners}" change="handleOwnerChanged()"/>
+						<mx:ComboBox id="ownerBox" dataProvider="{model.owners}" change="model.tickets.refresh()"/>
 						<mx:Spacer height="10"/>
 						<mx:Text text="Keywords:"/>
 						<mx:TextInput id="keywordFilter" change="model.tickets.refresh()" width="90%"/>		
@@ -389,7 +395,9 @@
 		<mx:ProgressBar id="ticketProgress" label="{'Loading Tickets ' + ticketProgress.percentComplete.toPrecision(0) + '%'}" 
 			mode="{ProgressBarMode.MANUAL}" labelPlacement="center"
 			horizontalCenter="0" verticalCenter="0" fontSize="14" fontWeight="bold" color="#000000"/>		  
+		<mx:Label y="{ticketProgress.y + ticketProgress.height + 10}" 
+			text="Synchronizing with the Trac server for the first time. This may take several minutes but will only need to run once." 
+			visible="{model.firstSync}"/>
 	</mx:Canvas>
 	<util:Observe source="{model.numTicketsLoaded}" handler="{updateTicketProgress}"/>
-	<util:Observe source="{model.owners.length}" handler="{setOwner}"/>
 </mx:WindowedApplication>

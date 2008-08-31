@@ -3,8 +3,10 @@ package com.effectiveui.command
 	import com.adobe.cairngorm.commands.Command;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.effectiveui.component.TracTicket;
+	import com.effectiveui.event.GetOwnersEvent;
 	import com.effectiveui.event.GetTicketsEvent;
 	import com.effectiveui.model.TracModel;
+	import com.effectiveui.util.IOUtil;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
 	
@@ -17,16 +19,18 @@ package com.effectiveui.command
 	{
 		protected var conn:ConnectionImpl;
 		protected var model:TracModel = TracModel.getInstance();
+		protected var sync:Boolean = false;
 
 		public function execute(event:CairngormEvent):void
 		{
 			//first we need to get the list of tickets for this user
 			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
-			model.currentTimeStamp = model.dateToISO();
-			if(GetTicketsEvent(event).owner && GetTicketsEvent(event).owner.length > 0){
-				conn.addParam("owner=" + GetTicketsEvent(event).owner +"&status!=closed", XMLRPCDataTypes.STRING);
-			} else {
+			model.currentTimeStamp = new Date().time;
+			if(GetTicketsEvent(event).type == GetTicketsEvent.GET_ACTIVE){
 				conn.addParam("status!=closed", XMLRPCDataTypes.STRING);
+			} else {
+				conn.addParam("status!=FILLER", XMLRPCDataTypes.STRING); //get all tickets no matter the status
+				sync = true;				
 			}
 			conn.addEventListener(Event.COMPLETE, handleTicketList);
 			model.ticketsLoaded = false;
@@ -73,6 +77,7 @@ package com.effectiveui.command
 					ticket.id = tickets[i][0][0];
 					ticket.getFromTicketObject(tickets[i][0][3]);
 					model.tickets.addItem(ticket);
+					IOUtil.addTicketToDB(ticket);
 				}
 				model.numTicketsLoaded++;
 			}			
@@ -80,6 +85,11 @@ package com.effectiveui.command
 				model.ticketsLoaded = true;
 				model.tickets.enableAutoUpdate();
 				model.tickets.refresh();
+				if(sync){
+					model.sync = true;
+					model.firstSync = false;
+				}				
+				new GetOwnersEvent().dispatch();
 			}
 		}
 		
