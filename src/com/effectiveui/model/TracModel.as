@@ -69,6 +69,8 @@ package com.effectiveui.model
 		public var sync:Boolean = false; //indicates whether we are keeping the local copy in sync with the server
 		public var dbConnection:SQLConnection;
 		public var firstSync:Boolean = false; //indicates whether we are currently syncing for the first time
+		
+		public var currStatusSet:String = ""; //indicates the current status set that is selected: all, open, or closed 
 	}
 	
 	

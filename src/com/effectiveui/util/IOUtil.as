@@ -1,5 +1,6 @@
 package com.effectiveui.util
 {
+	import com.effectiveui.command.GetStatusesCommand;
 	import com.effectiveui.component.TracTicket;
 	import com.effectiveui.event.GetNewTicketsEvent;
 	import com.effectiveui.model.TracModel;
@@ -45,14 +46,16 @@ package com.effectiveui.util
 			stmt.text = "SELECT * FROM tickets";
 			stmt.addEventListener(SQLEvent.RESULT, handleTicketsLoaded);
 			stmt.execute();
+			TracModel.getInstance().currStatusSet = GetStatusesCommand.ALL_STATUSES;
 		}
 		
 		public static function loadOpenTickets():void{
 			var stmt:SQLStatement = new SQLStatement();
 			stmt.sqlConnection = TracModel.getInstance().dbConnection;
-			stmt.text = "SELECT * FROM tickets WHERE status IS NOT 'closed'";
+			stmt.text = "SELECT * FROM tickets WHERE status NOT LIKE 'closed'";
 			stmt.addEventListener(SQLEvent.RESULT, handleTicketsLoaded);
 			stmt.execute();
+			TracModel.getInstance().currStatusSet = GetStatusesCommand.NON_CLOSED;
 		}
 		
 		public static function loadClosedTickets():void{
@@ -61,6 +64,7 @@ package com.effectiveui.util
 			stmt.text = "SELECT * FROM tickets WHERE status LIKE 'closed'";
 			stmt.addEventListener(SQLEvent.RESULT, handleTicketsLoaded);
 			stmt.execute();
+			TracModel.getInstance().currStatusSet = GetStatusesCommand.CLOSED;
 		}
 		
 		protected static function handleTicketsLoaded(event:SQLEvent):void{			

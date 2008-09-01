@@ -6,6 +6,7 @@
 	<control:TracUIController id="controller"/>
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.command.GetStatusesCommand;
 			import com.effectiveui.util.IOUtil;
 			import com.effectiveui.event.GetNewTicketsEvent;
 			import com.effectiveui.event.GetScoresEvent;
@@ -63,7 +64,7 @@
 						return false;
 					}
 				}
-				if(statusBox.selectedIndex != 0 && statusBox.selectedItem){
+				if(statusBox.selectedItem != GetStatusesCommand.ALL_STATUSES && statusBox.selectedItem != GetStatusesCommand.NON_CLOSED && statusBox.selectedItem){
 					if(data.status.toString() != statusBox.selectedItem.toString()){
 						return false;
 					}
@@ -226,6 +227,18 @@
 				
 			}
 			
+			protected function checkStatus():void{
+				if(statusBox.selectedItem == GetStatusesCommand.ALL_STATUSES && model.currStatusSet != GetStatusesCommand.ALL_STATUSES){
+					IOUtil.loadAllTickets();
+				} else if(statusBox.selectedItem != GetStatusesCommand.ALL_STATUSES && statusBox.selectedItem.toString().toLowerCase() != GetStatusesCommand.CLOSED && model.currStatusSet != GetStatusesCommand.NON_CLOSED){
+					IOUtil.loadOpenTickets();
+				} else if(statusBox.selectedItem.toString().toLowerCase() == GetStatusesCommand.CLOSED && model.currStatusSet != GetStatusesCommand.CLOSED){
+					IOUtil.loadClosedTickets();
+				} else {
+					model.tickets.refresh();
+				}
+			}
+			
 		]]>
 	</mx:Script>
 	<mx:Style source="styles.css"/>
@@ -243,7 +256,7 @@
 						<mx:TextInput  id="textFilter" change="model.tickets.refresh()" width="90%"/>
 						<mx:Spacer height="10"/>
 						<mx:Text text="Status:"/>
-						<mx:ComboBox id="statusBox" dataProvider="{model.statuses}" change="model.tickets.refresh()" dataChange="statusBox.selectedIndex = 0"/>
+						<mx:ComboBox id="statusBox" dataProvider="{model.statuses}" change="checkStatus()" dataChange="statusBox.selectedIndex = 0"/>
 						<mx:Spacer height="10"/>
 						<mx:Text text="Version:"/>
 						<mx:ComboBox id="versionBox" dataProvider="{model.versions}" change="model.tickets.refresh()" dataChange="versionBox.selectedIndex = 0"/>
