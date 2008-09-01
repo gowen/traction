@@ -11,6 +11,7 @@ package com.effectiveui.command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;
+		public static const ALL_PRIORITIES:String = "All Priorities";
 		
 		public function execute(event:CairngormEvent):void
 		{
@@ -21,7 +22,7 @@ package com.effectiveui.command
 		
 		protected function handlePrioritiesReturn(event:Event):void{
 			model.priorities.removeAll();
-			model.priorities.addItemAt(model.NO_VALUE, 0);
+			model.priorities.addItemAt(ALL_PRIORITIES, 0);
 			var priorities:Array = conn.getResponse() as Array;
 			for each(var priority:String in priorities){
 				model.priorities.addItem(priority);

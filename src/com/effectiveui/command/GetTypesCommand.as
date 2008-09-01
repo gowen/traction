@@ -11,6 +11,7 @@ package com.effectiveui.command
 	{
 		protected var conn:ConnectionImpl;
 		protected var model:TracModel = TracModel.getInstance();
+		public static const ALL_TYPES:String = "All Types";
 		
 		public function execute(event:CairngormEvent):void
 		{
@@ -21,7 +22,7 @@ package com.effectiveui.command
 		
 		protected function handleTypesReturn(event:Event):void{
 			model.types.removeAll();
-			model.types.addItemAt(model.NO_VALUE, 0);
+			model.types.addItemAt(ALL_TYPES, 0);
 			var types:Array = (conn.getResponse() as Array);
 			for each(var type:String in types){
 				model.types.addItem(type);

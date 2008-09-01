@@ -6,13 +6,12 @@ package com.effectiveui.command
 	import com.mattism.http.xmlrpc.ConnectionImpl;
 	
 	import flash.events.Event;
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 
 	public class GetComponentsCommand implements Command
 	{
 		protected var conn:ConnectionImpl;
 		protected var model:TracModel = TracModel.getInstance();
+		public static const ALL_COMPONENTS:String = "All Components";
 		
 		public function execute(event:CairngormEvent):void
 		{
@@ -23,7 +22,7 @@ package com.effectiveui.command
 						
 		protected function handleComponentsReturn(event:Event):void{		
 			model.components.removeAll();
-			model.components.addItemAt(model.NO_VALUE, 0);
+			model.components.addItemAt(ALL_COMPONENTS, 0);
 			var components:Array = (conn.getResponse() as Array);
 			for each(var component:String in components){
 				model.components.addItem(component);

@@ -11,6 +11,7 @@ package com.effectiveui.command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;
+		public static const ALL_MILESTONES:String = "All Milestones";
 
 		public function execute(event:CairngormEvent):void
 		{
@@ -21,7 +22,7 @@ package com.effectiveui.command
 		
 		protected function handleMilestoneReturn(event:Event):void{
 			model.milestones.removeAll();
-			model.milestones.addItemAt(model.NO_VALUE, 0);
+			model.milestones.addItemAt(ALL_MILESTONES, 0);
 			var milestones:Array = (conn.getResponse() as Array);
 			for each(var milestone:String in milestones){
 				model.milestones.addItem(milestone);

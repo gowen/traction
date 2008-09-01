@@ -11,6 +11,9 @@ package com.effectiveui.command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;
+		public static const ALL_STATUSES:String = "All Statuses";
+		public static const NON_CLOSED:String = "All Open Tickets";		
+		public static const CLOSED:String = "closed";
 		
 		public function execute(event:CairngormEvent):void
 		{
@@ -20,8 +23,9 @@ package com.effectiveui.command
 		}
 		
 		protected function handleStatusesReturn(event:Event):void{
-			model.statuses.removeAll();
-			model.statuses.addItemAt(model.NO_VALUE, 0);
+			model.statuses.removeAll();			
+			model.statuses.addItemAt(ALL_STATUSES, 0);
+			model.statuses.addItemAt(NON_CLOSED, 1);
 			var statuses:Array = conn.getResponse() as Array;
 			for each(var status:String in statuses){
 				model.statuses.addItem(status);

@@ -11,6 +11,7 @@ package com.effectiveui.command
 	public class GetOwnersCommand implements Command
 	{
 		protected var model:TracModel = TracModel.getInstance();
+		public static const ALL_OWNERS:String = "All Owners";
 	
 		public function execute(event:CairngormEvent):void{
 			if(!model.dbConnection || !model.dbConnection.connected){
@@ -25,6 +26,9 @@ package com.effectiveui.command
 		}
 		
 		public function handleSQLReturn(event:SQLEvent):void{
+			if(model.owners.length <= 0 || model.owners.getItemAt(0).toString() != ALL_OWNERS){
+				model.owners.addItemAt(ALL_OWNERS, 0);
+			}
 			var results:SQLResult = SQLStatement(event.target).getResult();
 			if(results && results.data && results.data.length > 0){
 				for each (var entry:Object in results.data){
@@ -32,7 +36,7 @@ package com.effectiveui.command
 						model.owners.addItem(entry.owner);
 					}
 				}
-			}
+			}			
 		}
 	
 	/*	protected var conn:ConnectionImpl;

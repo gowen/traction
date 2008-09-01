@@ -77,7 +77,7 @@ package com.effectiveui.command
 		// getWeight first tries to return the priority supplied by the user
 		// as a number.  If the trac admin does not have the priorities
 		// set to numbers, the weight will simply be the priority index + 1
-		// Again we must account for the model.NO_VALUE placed at index 0 
+		// Again we must account for the "ALL_X" value placed at index 0 
 		protected function getWeight(priorityIndex:int):int{
 			var weight:int = model.priorities.length - priorityIndex;
 			var tempWeight:int = parseInt(model.priorities[priorityIndex] as String);

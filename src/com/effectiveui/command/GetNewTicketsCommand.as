@@ -74,7 +74,13 @@ package com.effectiveui.command
 							updated = true;
 						}
 					}
-					model.tickets.addItem(ticket);
+					//only add the ticket to the current list if its in the current status set
+					if(model.currStatusSet == GetStatusesCommand.ALL_STATUSES || 
+					  (ticket.status.toLowerCase() != GetStatusesCommand.CLOSED && model.currStatusSet == GetStatusesCommand.NON_CLOSED) || 
+					  (ticket.status.toLowerCase() == GetStatusesCommand.CLOSED && model.currStatusSet == GetStatusesCommand.CLOSED)){
+						model.tickets.addItem(ticket);		
+					}
+					//but add it to the DB no matter what
 					IOUtil.addTicketToDB(ticket);
 				}
 				if(!updated)

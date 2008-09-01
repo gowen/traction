@@ -11,6 +11,7 @@ package com.effectiveui.command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;
+		public static const ALL_RESOLUTIONS:String = "All Resolutions";
 		
 		public function execute(event:CairngormEvent):void
 		{
@@ -21,7 +22,7 @@ package com.effectiveui.command
 		
 		protected function handleResolutionsReturn(event:Event):void{
 			model.resolutions.removeAll();
-			model.resolutions.addItemAt(model.NO_VALUE, 0);
+			model.resolutions.addItemAt(ALL_RESOLUTIONS, 0);
 			var resolutions:Array = conn.getResponse() as Array;
 			for each(var resolution:String in resolutions){	
 				model.resolutions.addItem(resolution);

@@ -11,6 +11,7 @@ package com.effectiveui.command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;
+		public static const ALL_VERSIONS:String = "All Versions";
 		
 		public function execute(event:CairngormEvent):void
 		{
@@ -21,7 +22,7 @@ package com.effectiveui.command
 		
 		protected function handleVersionsReturn(event:Event):void{
 			model.versions.removeAll();
-			model.versions.addItemAt(model.NO_VALUE, 0);
+			model.versions.addItemAt(ALL_VERSIONS, 0);
 			var versions:Array = conn.getResponse() as Array;
 			for each(var version:String in versions){
 				model.versions.addItem(version);
