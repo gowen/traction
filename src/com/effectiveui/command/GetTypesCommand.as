@@ -2,7 +2,7 @@ package com.effectiveui.command
 {
 	import com.adobe.cairngorm.commands.Command;
 	import com.adobe.cairngorm.control.CairngormEvent;
-	import com.effectiveui.model.TracModel;
+import com.effectiveui.model.TracModel;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
 	
 	import flash.events.Event;

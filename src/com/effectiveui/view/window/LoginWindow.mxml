@@ -52,6 +52,12 @@
 				
 				private var model:TracModel = TracModel.getInstance();
 			
+				/**
+				 * The login function uses the user's credentials to try to connect to the Trac 
+				 * server and call the standard "listMethods" method.  If this succeeds then we
+				 * know that the user's credendials are correct. Otherwise we do not consider the
+				 * user to be "logged in."
+				 * */
 				private function login():void{
 					loggingIn = true;
 					trace("attempting to login");
@@ -64,6 +70,11 @@
 					conn.call("system.listMethods");												
 				}
 				
+				/**
+				 * If the "listMethods" method can be called then we know the user's credentials are
+				 * valid and consider them to be "logged in." We then attempt to open a connection to
+				 * the local DB and create the schema if necessary.
+				 * */
 				protected function handleLogin(event:Event):void{		
 					trace("logged in successfully");
 					model.dbConnection = new SQLConnection();
@@ -75,6 +86,9 @@
 					model.dbConnection.openAsync(File.applicationStorageDirectory.resolvePath(model.username).resolvePath('cache.db'));
 				}
 				
+				/**
+				 * Attempts to create the DB schema if necessary.
+				 * */
 				protected function createDBSchema(event:Event):void{
 					model.dbConnection.removeEventListener(SQLEvent.OPEN, createDBSchema);
 					var createStmt:SQLStatement = new SQLStatement();
@@ -99,6 +113,14 @@
 					createStmt.execute();	
 				}
 				
+				/** 
+				 * Called once the DB calls return. If any of the DB calls failed then we will work in
+				 * non-caching mode. This means we'll only show active tickets and no tickets will be saved
+				 * locally. If the DB connection is made then we check for a saved timestamp. If there is one
+				 * then we load the tickets out of the DB and update our local copy with changes since the
+				 * cached timestamp. If there is not cached timestamp then we assume that there are no tickets 
+				 * stored locally and we attempt to download all tickets from the server.
+				 * */
 				protected function continueLogin(event:Event):void{								
 					new GetMilestonesEvent().dispatch();				
 					new GetPrioritiesEvent().dispatch();

@@ -1,9 +1,11 @@
 package com.effectiveui.control
-{
+{	
 	import com.adobe.cairngorm.control.FrontController;
+	
 	import com.effectiveui.command.CreateNewTicketCommand;
 	import com.effectiveui.command.GetComponentsCommand;
 	import com.effectiveui.command.GetMilestonesCommand;
+	import com.effectiveui.command.GetNewTicketsCommand;
 	import com.effectiveui.command.GetOwnersCommand;
 	import com.effectiveui.command.GetPrioritiesCommand;
 	import com.effectiveui.command.GetResolutionsCommand;
@@ -12,11 +14,12 @@ package com.effectiveui.control
 	import com.effectiveui.command.GetTicketsCommand;
 	import com.effectiveui.command.GetTypesCommand;
 	import com.effectiveui.command.GetVersionsCommand;
-	import com.effectiveui.command.GetNewTicketsCommand;
 	import com.effectiveui.command.UpdateTicketCommand;
+	
 	import com.effectiveui.event.CreateNewTicketEvent;
 	import com.effectiveui.event.GetComponentsEvent;
 	import com.effectiveui.event.GetMilestonesEvent;
+	import com.effectiveui.event.GetNewTicketsEvent;
 	import com.effectiveui.event.GetOwnersEvent;
 	import com.effectiveui.event.GetPrioritiesEvent;
 	import com.effectiveui.event.GetResolutionsEvent;
@@ -25,12 +28,11 @@ package com.effectiveui.control
 	import com.effectiveui.event.GetTicketsEvent;
 	import com.effectiveui.event.GetTypesEvent;
 	import com.effectiveui.event.GetVersionsEvent;
-	import com.effectiveui.event.GetNewTicketsEvent;
 	import com.effectiveui.event.UpdateTicketEvent;
 
-	public class TracUIController extends FrontController
+	public class TracStarController extends FrontController
 	{
-		public function TracUIController()
+		public function TracStarController()
 		{
 			super();
 			initializeCommands();

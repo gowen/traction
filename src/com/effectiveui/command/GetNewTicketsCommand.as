@@ -80,8 +80,10 @@ package com.effectiveui.command
 					  (ticket.status.toLowerCase() == GetStatusesCommand.CLOSED && model.currStatusSet == GetStatusesCommand.CLOSED)){
 						model.tickets.addItem(ticket);		
 					}
-					//but add it to the DB no matter what
-					IOUtil.addTicketToDB(ticket);
+					//but add it to the DB as long as we're not in non-caching mode
+					if(model.sync){
+						IOUtil.addTicketToDB(ticket);
+					}
 				}
 				if(!updated)
 					model.numTicketsLoaded++;

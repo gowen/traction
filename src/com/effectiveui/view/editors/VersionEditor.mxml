@@ -5,8 +5,8 @@
 	change="updateTicket()">
 	<mx:Script>
 		<![CDATA[
-			import com.effectiveui.event.UpdateTicketEvent;
-			import com.effectiveui.model.TracModel;
+			import .event.UpdateTicketEvent;
+			import .model.TracModel;
 			protected function updateTicket():void{
 				if(this.selectedItem != data.version){				
 					data.version = this.selectedItem;				

@@ -35,33 +35,12 @@ package com.effectiveui.command
 					if(!model.owners.contains(entry.owner)){
 						model.owners.addItem(entry.owner);
 					}
+					var scoreCard:Object = new Object();
+                   	scoreCard["owner"] = entry.owner;
+					scoreCard["score"] = 0;
+					model.scoreBoard.addItem(scoreCard);
 				}
 			}			
 		}
-	
-	/*	protected var conn:ConnectionImpl;
-		public function execute(event:CairngormEvent):void{		
-			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
-			conn.addParam("CurrentUsers", XMLRPCDataTypes.STRING);
-			conn.addEventListener(Event.COMPLETE, handleOwnersReturn);
-			conn.call("wiki.getPage");
-		}
-		
-		protected function handleOwnersReturn(event:Event):void{
-			model.owners.removeAll();
-			model.owners.addItem(model.NO_VALUE);
-			var owners:Array = (conn.getResponse() as String).split("\r\n");
-			for each(var owner:String in owners){
-				model.owners.addItem(owner);
-				
-				var scoreCard:Object = new Object();
-				scoreCard["owner"] = owner;
-				scoreCard["score"] = 0;
-				model.scoreBoard.addItem(scoreCard);
-			}
-			if(!model.owners.contains(model.username)){
-				model.owners.addItem(model.username);
-			}
-		}*/
 	}
 }
