@@ -30,9 +30,9 @@ package com.effectiveui.control
 	import com.effectiveui.event.GetVersionsEvent;
 	import com.effectiveui.event.UpdateTicketEvent;
 
-	public class TracStarController extends FrontController
+	public class TractionController extends FrontController
 	{
-		public function TracStarController()
+		public function TractionController()
 		{
 			super();
 			initializeCommands();

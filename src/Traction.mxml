@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	
+	Contact: 
 
-    This file is part of TracStar.
+    This file is part of Traction.
 
-    TracStar is free software: you can redistribute it and/or modify
+    Traction is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     any later version.
 
-    TracStar is distributed in the hope that it will be useful,
+    Traction is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with TracStar.  If not, see <http://www.gnu.org/licenses/>.
+    along with Traction.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
 <mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="1300"
 	creationComplete="launchLogin()" visible="false" frameRate="30" closing="if(model.sync)IOUtil.saveTime(model.currentTimeStamp)" 
 	xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0" 
 	xmlns:component="com.effectiveui.component.*" xmlns:util="com.effectiveui.util.*">
-	<control:TracStarController id="controller"/>
+	<control:TractionController id="controller"/>
 	<mx:Script>
 		<![CDATA[
 			import com.effectiveui.util.IOUtil;
