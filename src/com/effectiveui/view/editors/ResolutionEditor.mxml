@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	
+	Website: http://github.com/gowen/traction 
+
+    This file is part of Traction.
+
+    Traction is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    Traction is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Traction.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
 <component:TracComboBox xmlns:component="com.effectiveui.component.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
 	dataProvider="{TracModel.getInstance().resolutions}" selectedIndex="{TracModel.getInstance().resolutions.getItemIndex(data.resolution.toString())}"
 	change="updateTicket()" xmlns:util="com.effectiveui.util.*" dropdownWidth="95">

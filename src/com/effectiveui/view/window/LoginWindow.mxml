@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	
+	Website: http://github.com/gowen/traction 
+
+    This file is part of Traction.
+
+    Traction is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    any later version.
+
+    Traction is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Traction.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
 <mx:Window xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="450" height="200" creationComplete="init()" backgroundColor="#000000">
 	<mx:Canvas height="100%" width="100%" top="5" bottom="5" left="5" right="5" cornerRadius="4" backgroundColor="#444441" borderColor="#000000">
 		<mx:Text text="Could not login. Please try again" fontWeight="bold" color="0x990000" visible="false" id="errorMsg" horizontalCenter="0"/>
