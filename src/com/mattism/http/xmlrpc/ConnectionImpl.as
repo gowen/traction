@@ -5,6 +5,9 @@
 *
 * @author   Daniel Mclaren (http://danielmclaren.net)
 * @note     Updated to Actionscript 3.0
+* 
+* @author   Greg Owen
+* @note   	Adds HTTP/S basic authentication to the connection. 
 */
 
 package com.mattism.http.xmlrpc
