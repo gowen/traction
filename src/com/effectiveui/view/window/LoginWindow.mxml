@@ -83,11 +83,14 @@
 					loggingIn = true;
 					trace("attempting to login");
 					model.username = uname.text;
-					model.password = pass.text;
+					model.password = pass.text;					
+					model.projectName = serverURL.text.substring(serverURL.text.lastIndexOf('/') + 1, serverURL.text.length);
 					if(model.username && model.username.length > 0 && model.password && model.password.length > 0){
-						model.serverURL = serverURL.text + "/login/xmlrpc";	
+						model.serverURL = serverURL.text + "/login/xmlrpc";							
+						model.projectPath = model.username + "/" + model.projectName;
 					} else {
 						model.serverURL = serverURL.text + "/xmlrpc";
+						model.projectPath = model.projectName;
 					}
 									
 					var conn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);	
@@ -106,10 +109,10 @@
 					model.dbConnection = new SQLConnection();
 					model.dbConnection.addEventListener(SQLEvent.OPEN, createDBSchema);
 					model.dbConnection.addEventListener(SQLErrorEvent.ERROR, continueLogin);
-					if(!File.applicationStorageDirectory.resolvePath(model.username).exists){
-						File.applicationStorageDirectory.resolvePath(model.username).createDirectory();
+					if(!File.applicationStorageDirectory.resolvePath(model.projectPath).exists){
+						File.applicationStorageDirectory.resolvePath(model.projectPath).createDirectory();
 					}
-					model.dbConnection.openAsync(File.applicationStorageDirectory.resolvePath(model.username).resolvePath('cache.db'));
+					model.dbConnection.openAsync(File.applicationStorageDirectory.resolvePath(model.projectPath).resolvePath('\cache.db'));
 				}
 				
 				/**

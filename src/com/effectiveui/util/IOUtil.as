@@ -133,15 +133,22 @@ package com.effectiveui.util
 		}
 		
 		public static function saveTime(time:Number):void{
+			if(!File.applicationStorageDirectory.resolvePath(TracModel.getInstance().projectPath).exists){
+				File.applicationStorageDirectory.resolvePath(TracModel.getInstance().projectPath).createDirectory();
+			}
 			var stream:FileStream = new FileStream();
-			stream.open(File.applicationStorageDirectory.resolvePath(TracModel.getInstance().username).resolvePath('lastUpdated.dat'), FileMode.WRITE);
+			stream.open(File.applicationStorageDirectory.resolvePath(TracModel.getInstance().projectPath).resolvePath('lastUpdated.dat'), FileMode.WRITE);
 			stream.writeDouble(time);
 		}
 		
 		public static function readTime():Number{
-			var stream:FileStream = new FileStream();
-			stream.open(File.applicationStorageDirectory.resolvePath(TracModel.getInstance().username).resolvePath('lastUpdated.dat'), FileMode.READ);
-			var lastTime:Number = stream.readDouble();
+			var lastTime:Number = -1;
+			var timeFile:File = File.applicationStorageDirectory.resolvePath(TracModel.getInstance().projectPath).resolvePath('lastUpdated.dat');
+			if(timeFile.exists && !timeFile.isDirectory){
+				var stream:FileStream = new FileStream();
+				stream.open(timeFile, FileMode.READ);
+				lastTime = stream.readDouble();
+			}
 			return lastTime;
 		}
 	}

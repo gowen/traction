@@ -66,6 +66,8 @@ package com.effectiveui.model
 		public var username:String;
 		public var password:String;
 		public var serverURL:String;
+		public var projectName:String; //the name of the project based on the URL
+		public var projectPath:String; //the path to the project within appStorage currently its username/projectName
 		public var currentTicket:TracTicket = new TracTicket();
 		public var tickets:ArrayCollection = new ArrayCollection();
 		public var milestones:ArrayCollection = new ArrayCollection();
