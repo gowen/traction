@@ -84,7 +84,12 @@
 					trace("attempting to login");
 					model.username = uname.text;
 					model.password = pass.text;
-					model.serverURL = serverURL.text + "/login/xmlrpc";				
+					if(model.username && model.username.length > 0 && model.password && model.password.length > 0){
+						model.serverURL = serverURL.text + "/login/xmlrpc";	
+					} else {
+						model.serverURL = serverURL.text + "/xmlrpc";
+					}
+									
 					var conn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);	
 					conn.addEventListener(Event.COMPLETE, handleLogin);		
 					conn.addEventListener(IOErrorEvent.IO_ERROR, handleLoginFailed);
