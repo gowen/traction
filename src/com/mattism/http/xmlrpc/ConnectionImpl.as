@@ -15,6 +15,7 @@ package com.mattism.http.xmlrpc
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.HTTPStatusEvent;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
@@ -58,6 +59,8 @@ package com.mattism.http.xmlrpc
 			this._response = new URLLoader();
 			this._response.addEventListener(Event.COMPLETE, this._onLoad);
 			this._response.addEventListener(IOErrorEvent.IO_ERROR, handleIOError);
+	//		this._response.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, handleHTTPStatus);
+			this._response.addEventListener(HTTPStatusEvent.HTTP_STATUS, handleHTTPStatus);
 	
 			if (url){
 				this.setUrl( url );
@@ -71,12 +74,19 @@ package com.mattism.http.xmlrpc
 			
 		}
 		
-		private function handleIOError(event:Event):void{
-			event.stopImmediatePropagation();
-			dispatchEvent(new ErrorEvent(IOErrorEvent.IO_ERROR));
+		private function handleIOError(event:IOErrorEvent):void{
+		//	event.stopImmediatePropagation();
+		//	dispatchEvent(new ErrorEvent(IOErrorEvent.IO_ERROR));
+			trace("ERRROR: IOERROR: " + event.text + " WITH ID: " + event.errorID);
+			trace("Resending...");
+			doCall();
 		}
 		
-		public function call( method:String ):void { this._call( method ); }
+		protected function handleHTTPStatus(event:HTTPStatusEvent):void{			
+			trace('Status: ' + event.status);
+		}
+		
+		public function call( method:String ):void { this._call( method ); }			
 	
 		private function _call( method:String ):void {
 			if ( !this.getUrl() ){
@@ -87,26 +97,28 @@ package com.mattism.http.xmlrpc
 				this.debug( "Call -> " + method+"() -> " + this.getUrl());
 				
 				this._method.setName( method );
-				
-				var request:URLRequest = new URLRequest();
-				request.contentType = 'text/xml';
-				request.data = this._method.getXml();
-				request.method = URLRequestMethod.POST;
-				request.url = this.getUrl();
-				request.authenticate = false;
-				if(_username && _password){
-					var authData:Base64Encoder = new Base64Encoder();
-					authData.encode(_username + ':' + _password);
-					var authHeader:URLRequestHeader = new URLRequestHeader("Authorization", "Basic " + authData.toString());
-					request.requestHeaders.push(authHeader);
-				}
-				
-				this._response.load(request);				
+				doCall();							
 			}
+		}
+		
+		protected function doCall():void{
+			var request:URLRequest = new URLRequest();
+			request.contentType = 'text/xml';
+			request.data = this._method.getXml();
+			request.method = URLRequestMethod.POST;
+			request.url = this.getUrl();
+			request.authenticate = false;
+			if(_username && _password){
+				var authData:Base64Encoder = new Base64Encoder();
+				authData.encode(_username + ':' + _password);
+				var authHeader:URLRequestHeader = new URLRequestHeader("Authorization", "Basic " + authData.toString());
+				request.requestHeaders.push(authHeader);
+			}
+			
+			this._response.load(request);	
 		}
 	
 		private function _onLoad( evt:Event ):void {
-			
 			var responseXML:XML = new XML(this._response.data);
 			
 			if (responseXML.fault.length() > 0)
@@ -151,6 +163,6 @@ package com.mattism.http.xmlrpc
 		
 		override public function toString():String { return '<xmlrpc.ConnectionImpl Object>'; }
 		
-		private function debug( a:String ):void { /*trace( this._PRODUCT + " -> " + a );*/ }
+		private function debug( a:String ):void { trace( this._PRODUCT + " -> " + a ); }
 	}
 }
