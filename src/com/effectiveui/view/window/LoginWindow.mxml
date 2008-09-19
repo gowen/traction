@@ -150,7 +150,8 @@
 				 * cached timestamp. If there is not cached timestamp then we assume that there are no tickets 
 				 * stored locally and we attempt to download all tickets from the server.
 				 * */
-				protected function continueLogin(event:Event):void{								
+				protected function continueLogin(event:Event):void{		
+					trace("getting values for columns");						
 					new GetMilestonesEvent().dispatch();				
 					new GetPrioritiesEvent().dispatch();
 					new GetResolutionsEvent().dispatch();
@@ -159,7 +160,7 @@
 					new GetComponentsEvent().dispatch();
 					new GetTypesEvent().dispatch();
 					//new GetOwnersEvent().dispatch();
-					if(File.applicationStorageDirectory.resolvePath(model.username).resolvePath('lastUpdated.dat').exists && model.dbConnection.connected && !(event is SQLErrorEvent)){
+					if(File.applicationStorageDirectory.resolvePath(model.projectPath).resolvePath('lastUpdated.dat').exists && model.dbConnection.connected && !(event is SQLErrorEvent)){
 						model.sync = true;
 						var lastTime:Number = IOUtil.readTime();
 						model.currentTimeStamp = lastTime;
