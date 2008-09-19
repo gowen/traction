@@ -41,6 +41,8 @@ package com.effectiveui.command
 		protected var conn:ConnectionImpl;
 		protected var model:TracModel = TracModel.getInstance();
 		protected var sync:Boolean = false;
+		
+		public static var NUM_TICKETS_PER_REQUEST:int = 50;		
 
 		public function execute(event:CairngormEvent):void
 		{
@@ -59,6 +61,9 @@ package com.effectiveui.command
 			conn.call("ticket.query");
 		}
 		
+		protected var ticketList:Array;
+		protected var currentTicketIdx:int = 0;
+		
 		protected function handleTicketList(event:Event):void{
 			var sort:Sort = model.tickets.sort;
 			var filter:Function = model.tickets.filterFunction;
@@ -66,28 +71,27 @@ package com.effectiveui.command
 			model.tickets.sort = sort;
 			model.tickets.filterFunction = filter;
 			
-			var ticketList:Array = (conn.getResponse() as Array);
+			ticketList = (conn.getResponse() as Array);
 			model.ticketCount = ticketList.length;
 			if(model.ticketCount == 0)
 				model.ticketsLoaded = true;
-			var ticketRequestArray:Array = new Array();
 			
-			for(var i:int = 0; i < ticketList.length; i++){
-				var request:Object = new Object();
-				request["methodName"] = "ticket.get";
-				request["params"] = new Array();
-				(request["params"] as Array).push({type:XMLRPCDataTypes.DOUBLE, value:ticketList[i]});
-				ticketRequestArray.push(request);
-				
-				if(ticketRequestArray.length > 50 || i == ticketList.length - 1){
-					var tempConn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);
-					tempConn.addParam(ticketRequestArray, XMLRPCDataTypes.ARRAY);
-					tempConn.addEventListener(Event.COMPLETE, handleTicketsReturn);
-					tempConn.call("system.multicall");
-					ticketRequestArray = new Array();
+			while(currentTicketIdx < ticketList.length){
+				var ticketRequestArray:Array = new Array();
+				for(currentTicketIdx; currentTicketIdx < ticketList.length && ticketRequestArray.length < NUM_TICKETS_PER_REQUEST; currentTicketIdx++){
+					var request:Object = new Object();
+					request["methodName"] = "ticket.get";
+					request["params"] = new Array();
+					(request["params"] as Array).push({type:XMLRPCDataTypes.DOUBLE, value:ticketList[currentTicketIdx]});				
+					ticketRequestArray.push(request);
 				}
-			}			
-		} 
+				
+				var tempConn:ConnectionImpl = new ConnectionImpl(model.serverURL, model.username, model.password);
+				tempConn.addParam(ticketRequestArray, XMLRPCDataTypes.ARRAY);
+				tempConn.addEventListener(Event.COMPLETE, handleTicketsReturn);
+				tempConn.call("system.multicall");			
+			}		
+		} 		
 		
 		protected function handleTicketsReturn(event:Event):void{
 			var tickets:Array = ((event.target as ConnectionImpl).getResponse() as Array);			
@@ -109,6 +113,7 @@ package com.effectiveui.command
 				if(sync){
 					model.sync = true;
 					model.firstSync = false;
+					IOUtil.saveTime(model.currentTimeStamp);
 				}				
 				new GetOwnersEvent().dispatch();
 			}
