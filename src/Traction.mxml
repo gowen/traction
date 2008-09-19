@@ -482,8 +482,11 @@
 		<mx:ProgressBar id="ticketProgress" label="{'Loading Tickets ' + ticketProgress.percentComplete.toPrecision(0) + '%'}" 
 			mode="{ProgressBarMode.MANUAL}" labelPlacement="center"
 			horizontalCenter="0" verticalCenter="0" fontSize="14" fontWeight="bold" color="#000000"/>		  
-		<mx:Label y="{ticketProgress.y + ticketProgress.height + 10}" 
+		<mx:Label y="{ticketProgress.y + ticketProgress.height + 10}" horizontalCenter="0" fontSize="10" 
 			text="Synchronizing with the Trac server for the first time. This may take several minutes but will only need to run once." 
+			visible="{model.firstSync}"/>
+		<mx:Label y="{ticketProgress.y + ticketProgress.height + 30}" horizontalCenter="0" fontSize="16" 
+			text="{(!model.ticketCount || !model.ticketCount > 0) ? 'Waiting for the server...' : 'Loaded ' + model.numTicketsLoaded + ' tickets out of ' + model.ticketCount}" 
 			visible="{model.firstSync}"/>
 	</mx:Canvas>
 	<util:Observe source="{model.numTicketsLoaded}" handler="{updateTicketProgress}"/>
