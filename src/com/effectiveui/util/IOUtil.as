@@ -151,5 +151,16 @@ package com.effectiveui.util
 			}
 			return lastTime;
 		}
+		
+		public static function readTextFile(fil:File):String{
+			var str:String;
+			if(fil.exists){
+				var stream:FileStream = new FileStream();
+				stream.open(fil, FileMode.READ);
+				str = stream.readUTFBytes(stream.bytesAvailable);
+				stream.close();
+			}
+			return str;
+		}
 	}
 }

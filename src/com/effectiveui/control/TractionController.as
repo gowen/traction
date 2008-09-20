@@ -22,7 +22,7 @@
 package com.effectiveui.control
 {	
 	import com.adobe.cairngorm.control.FrontController;
-	
+	import com.effectiveui.command.CheckApplicationVersionCommand;
 	import com.effectiveui.command.CreateNewTicketCommand;
 	import com.effectiveui.command.GetComponentsCommand;
 	import com.effectiveui.command.GetMilestonesCommand;
@@ -36,7 +36,7 @@ package com.effectiveui.control
 	import com.effectiveui.command.GetTypesCommand;
 	import com.effectiveui.command.GetVersionsCommand;
 	import com.effectiveui.command.UpdateTicketCommand;
-	
+	import com.effectiveui.event.CheckApplicationVersionEvent;
 	import com.effectiveui.event.CreateNewTicketEvent;
 	import com.effectiveui.event.GetComponentsEvent;
 	import com.effectiveui.event.GetMilestonesEvent;
@@ -74,6 +74,7 @@ package com.effectiveui.control
 			addCommand(GetScoresEvent.GET_SCORES, GetScoresCommand);
 			addCommand(CreateNewTicketEvent.NEW_TICKET, CreateNewTicketCommand);
 			addCommand(GetNewTicketsEvent.GET_NEW_TICKETS, GetNewTicketsCommand);			
+			addCommand(CheckApplicationVersionEvent.CHECK_VERSION, CheckApplicationVersionCommand);
 		}
 		
 	}

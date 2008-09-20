@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:component="com.ebay.component.*" 
+	dropShadowEnabled="true" 
+	shadowDistance="3"
+	borderColor="#000000" 
+	borderThickness="2"
+	borderStyle="solid"
+	cornerRadius="6"
+	backgroundColor="#333333"
+	creationComplete="callLater(centerToParent)"
+	visible="false"
+	verticalScrollPolicy="off"
+	horizontalScrollPolicy="off"
+	paddingTop="3"
+	paddingBottom="3"
+	paddingLeft="3"
+	paddingRight="3"	
+	>
+	<mx:Metadata>
+		[Event(name="okClicked", type="flash.events.Event")]
+		[Event(name="cancelClicked", type="flash.events.Event")]
+	</mx:Metadata>
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			public static const OK:String = "OK";
+			public static const CANCEL:String = "Cancel";
+			public static const CLOSE:String = "Close";
+			
+			[Bindable]
+			public var titleText:String;
+			[Bindable]
+			public var messageText:String;
+			[Bindable]
+			public var okButtonText:String;
+			[Bindable]
+			public var cancelButtonText:String;
+			private var onStage:Boolean;
+			
+			public function centerToParent():void {
+				PopUpManager.centerPopUp(this);
+				if(!visible){
+					visible = true
+				}
+			}
+			
+			public function buttonClicked(eventName:String):void{
+				dispatchEvent(new Event(eventName));
+				PopUpManager.removePopUp(this);
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:Label text="{titleText}" includeInLayout="{titleText != null}" width="100%" color="0xFFFFFF" fontWeight="bold" fontSize="12"/>
+	<mx:TextArea text="{messageText}" includeInLayout="{messageText != null}" width="100%" height="100%" borderStyle="none" focusAlpha="0" color="0xFFFFFF" backgroundColor="0x333333"/>
+	<mx:HBox width="100%" horizontalAlign="center">
+		<mx:Button label="{okButtonText}" click="buttonClicked('okClicked')" visible="{okButtonText != null}" includeInLayout="{okButtonText != null}" styleName="customButtonStyle"/>
+		<mx:Button label="{cancelButtonText}" click="buttonClicked('cancelClicked')" visible="{cancelButtonText != null}" includeInLayout="{cancelButtonText != null}" styleName="customButtonStyle"/>
+	</mx:HBox>
+</mx:VBox>

@@ -27,6 +27,8 @@
 	<control:TractionController id="controller"/>
 	<mx:Script>
 		<![CDATA[
+			import com.effectiveui.event.CheckApplicationVersionEvent;
+			import mx.core.Window;
 			import com.effectiveui.util.IOUtil;
 			import com.effectiveui.event.GetScoresEvent;
 			import com.effectiveui.event.GetNewTicketsEvent;
@@ -42,13 +44,16 @@
 			import mx.controls.ProgressBarMode;				
 			
 			[Bindable]
-			private var model:TracModel = TracModel.getInstance();						
+			private var model:TracModel = TracModel.getInstance();
+			protected var login:LoginWindow;						
 			
 			/**
 			 * Opens the login window and sets up the filter function on model.tickets				
 			**/
 			protected function launchLogin():void{
-				var login:LoginWindow = new LoginWindow();
+				//first check the app version
+				new CheckApplicationVersionEvent().dispatch();
+				login = new LoginWindow();
 				login.open();
 				login.orderToFront();
 				model.tickets.filterFunction = evalFilters;		
@@ -292,6 +297,14 @@
 						break;
 				}
 				
+			}
+			
+			public function getOpenWindow():DisplayObject{
+				if(login && login.visible){
+					return DisplayObject(login);
+				}
+				
+				return this;
 			}
 			
 			/** 

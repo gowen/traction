@@ -60,8 +60,10 @@ package com.effectiveui.model
 	                ((d.getUTCMinutes()< 10)?'0':'') + d.getUTCMinutes() +':'+
 	                ((d.getUTCSeconds()< 10)?'0':'') + d.getUTCSeconds();
         	iso = iso.substring(0, iso.length-0);
-        	return iso;
+        	return iso;        	
     	}
+    	
+    	public var appVersion:String; //the version of the installed application
 		
 		public var username:String;
 		public var password:String;
