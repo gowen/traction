@@ -83,7 +83,11 @@
 					loggingIn = true;
 					trace("attempting to login");
 					model.username = uname.text;
-					model.password = pass.text;					
+					model.password = pass.text;		
+					serverURL.text = serverURL.text.replace(new RegExp("\\s+$", ""), "");
+					serverURL.text = serverURL.text.replace(new RegExp("/$", ""), "");
+					var extraURL:RegExp = new RegExp("(/login)?/xmlrpc$", "i");
+					serverURL.text = serverURL.text.replace(extraURL, "");
 					model.projectName = serverURL.text.substring(serverURL.text.lastIndexOf('/') + 1, serverURL.text.length);
 					if(model.username && model.username.length > 0 && model.password && model.password.length > 0){
 						model.serverURL = serverURL.text + "/login/xmlrpc";							
