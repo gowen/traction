@@ -152,6 +152,26 @@ package com.effectiveui.util
 			return lastTime;
 		}
 		
+		public static function saveRefreshInterval(index:int):void{
+			if(!File.applicationStorageDirectory.resolvePath(TracModel.getInstance().projectPath).exists){
+				File.applicationStorageDirectory.resolvePath(TracModel.getInstance().projectPath).createDirectory();
+			}
+			var stream:FileStream = new FileStream();
+			stream.open(File.applicationStorageDirectory.resolvePath(TracModel.getInstance().projectPath).resolvePath('refreshInterval.dat'), FileMode.WRITE);
+			stream.writeInt(index);
+		}
+		
+		public static function readRefreshInterval():int{
+			var index:int = 1; //default is 2 minutes, index 1
+			var indexFile:File = File.applicationStorageDirectory.resolvePath(TracModel.getInstance().projectPath).resolvePath('refreshInterval.dat');
+			if(indexFile.exists && !indexFile.isDirectory){
+				var stream:FileStream = new FileStream();
+				stream.open(indexFile, FileMode.READ);
+				index = stream.readInt();
+			}
+			return index;
+		}
+		
 		public static function readTextFile(fil:File):String{
 			var str:String;
 			if(fil.exists){
