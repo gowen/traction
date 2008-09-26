@@ -25,6 +25,9 @@ package com.effectiveui.model
 	import com.effectiveui.component.TracTicket;
 	
 	import flash.data.SQLConnection;
+	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import mx.collections.ArrayCollection;
 
@@ -42,8 +45,8 @@ package com.effectiveui.model
 		{
 			if ( _model != null ){
 				throw new Error("Only one TracModel instance should be instantiated");	
-			}			
-		}
+			}						
+		}		
 		
 		//converts the current date timestamp to an .Iso86 format
 		public function dateToISO(time:Number = NaN):String {
@@ -86,6 +89,11 @@ package com.effectiveui.model
 		public var loggedIn:Boolean = false;
 		public var currentTimeStamp:Number;
 		public var themes:Array = ["blue", "green", "orange", "pink", "silver"];
+		public var updating:Boolean = false; //indicates whether the app is currently updating its ticket base
+		public var sendingData:Boolean = false; //indicates whether the app is currently sending data to the server
+		public static const MINUTE:Number = 1000*60;
+		public var updateTime:Number = 2 * MINUTE;
+		public var updateTimer:Timer = new Timer(updateTime);
 		
 		public var scoreBoard:ArrayCollection = new ArrayCollection();
 		

@@ -4,6 +4,12 @@ global
 	 color: #DDDDDD;
 }
 
+ToolTip
+{
+	color: #000000;
+	background-color: #CCCCCC;
+}
+
 DataGrid
 {
 	header-separator-skin: ClassReference("com.effectiveui.skins.TracHeaderSeperatorSkin");
@@ -84,5 +90,11 @@ BarChart
      color: #FFFFFF;
      textRollOverColor: #FFFFFF;
      fontSize: 10;
+}
+
+.refreshButton{
+	upSkin: Embed("/assets/refresh.png");
+	downSkin: Embed("/assets/refresh_down.png");
+	overSkin: Embed("/assets/refresh_over.png");
 }
 

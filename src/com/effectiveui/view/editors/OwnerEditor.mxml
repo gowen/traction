@@ -21,7 +21,7 @@
 
 -->
 <component:TracComboBox xmlns:component="com.effectiveui.component.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
-	dataProvider="{TracModel.getInstance().owners}" dropdownWidth="80"
+	dataProvider="{TracModel.getInstance().owners}"
 	change="updateTicket()" selectedIndex="{TracModel.getInstance().owners.getItemIndex(data.owner.toString())}">
 	<mx:Script>
 		<![CDATA[

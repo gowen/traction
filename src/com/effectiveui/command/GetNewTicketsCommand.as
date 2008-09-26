@@ -38,8 +38,10 @@ package com.effectiveui.command
 		protected var model:TracModel = TracModel.getInstance();
 		protected var conn:ConnectionImpl;		
 		
-		public function execute(event:CairngormEvent):void
+		public function execute(event:CairngormEvent):void		
 		{
+			model.updating = true;
+			
 			conn = new ConnectionImpl(model.serverURL, model.username, model.password);
 			var timeStamp:String = (event as GetNewTicketsEvent).timeStamp;
 			conn.addParam(timeStamp, XMLRPCDataTypes.DATETIME);
@@ -50,8 +52,10 @@ package com.effectiveui.command
 		protected function handleTicketList(event:Event):void{
 			var ticketList:Array = (conn.getResponse() as Array);
 			model.ticketCount += ticketList.length;
-			if(ticketList.length == 0)
+			if(ticketList.length == 0){
 				model.ticketsLoaded = true;
+				model.updating = false;
+			}
 			var ticketRequestArray:Array = new Array();
 			
 			for(var i:int = 0; i < ticketList.length; i++){
@@ -68,7 +72,7 @@ package com.effectiveui.command
 					tempConn.call("system.multicall");
 					ticketRequestArray = new Array();
 				}
-			}			
+			}						
 		} 
 		
 		protected function handleTicketsReturn(event:Event):void{
@@ -116,6 +120,7 @@ package com.effectiveui.command
 				model.tickets.enableAutoUpdate();
 				model.tickets.refresh();
 				new GetOwnersEvent().dispatch();
+				model.updating = false;				
 			}
 		}
 	}

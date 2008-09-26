@@ -27,6 +27,7 @@
 	<control:TractionController id="controller"/>
 	<mx:Script>
 		<![CDATA[
+			import mx.collections.ArrayCollection;
 			import com.effectiveui.event.CheckApplicationVersionEvent;
 			import mx.core.Window;
 			import com.effectiveui.util.IOUtil;
@@ -45,7 +46,7 @@
 			
 			[Bindable]
 			private var model:TracModel = TracModel.getInstance();
-			protected var login:LoginWindow;						
+			protected var login:LoginWindow;												
 			
 			/**
 			 * Opens the login window and sets up the filter function on model.tickets				
@@ -57,7 +58,7 @@
 				login.open();
 				login.orderToFront();
 				model.tickets.filterFunction = evalFilters;		
-				login.addEventListener(Event.CLOSING, handleLoginClosing);		
+				login.addEventListener(Event.CLOSING, handleLoginClosing);						
 			}
 			
 			/**
@@ -68,6 +69,8 @@
 				if(model.loggedIn){
 					this.visible = true;
 					this.move(50,100);
+					model.updateTimer.addEventListener(TimerEvent.TIMER, updateTickets);
+					model.updateTimer.start();
 				} else {
 					close();
 				}
@@ -185,7 +188,7 @@
 			/**
 			 * Checks for changes on the server and updates the local ticket cache.
 			 * */
-			protected function updateTickets():void{
+			protected function updateTickets(event:Event=null):void{
 				new GetNewTicketsEvent(model.dateToISO(model.currentTimeStamp)).dispatch();
 				model.currentTimeStamp = new Date().time;
 				model.tickets.refresh();				
@@ -326,6 +329,22 @@
 				}
 			}
 			
+			protected function getAppStatus(updating:Boolean, sending:Boolean):String{
+				var statusString:String = "Status: ";
+				if(sending){
+					statusString += "Sending ticket data to the server";
+				} else if(updating){
+					statusString += "Checking the server for ticket updates";
+				} else {
+					statusString += "Ready";
+				}
+				
+				return statusString;
+			}
+			
+			[Bindable]
+			protected var updateTimes:ArrayCollection = new ArrayCollection(["1 Min", "2 Min", "5 Min", "15 Min"]);
+			
 		]]>
 	</mx:Script>
 	<mx:Style source="styles.css"/>
@@ -451,8 +470,13 @@
 			</mx:VBox> 
 		</mx:Accordion>
 		<mx:Canvas height="100%" width="100%" right="0">
-			<mx:Button id="refreshTickets" height="20" width="70" top="15" left="5" paddingBottom="5" label="Refresh" 
-				styleName="customButtonStyle" click="updateTickets()"/>
+			<mx:Text id="appStatus" top="0" left="5" fontSize="9" text="{getAppStatus(model.updating, model.sendingData)}"/>			
+			<mx:Text id="refreshIntervalLabel" top="17" left="5" text="Auto Refresh Interval:"/>
+			<component:TracComboBox id="refreshIntervalChooser" top="15" x="{refreshIntervalLabel.x + refreshIntervalLabel.width - 8}"
+				dataProvider="{updateTimes}" selectedIndex="1"/>
+			<mx:Button id="refreshTickets" top="15" x="{refreshIntervalChooser.x + refreshIntervalChooser.width - 13}" toolTip="Refresh Now" 
+				height="20" width="20" paddingBottom="5" styleName="refreshButton" useHandCursor="true" buttonMode="true" 
+				click="updateTickets()"/>	
 			<mx:VBox right="0" height="100%" verticalGap="0">
 				<mx:Text text="{'Currently viewing ' + model.tickets.length + ' tickets'}" right="0"/>
 				<mx:HBox bottom="5" right="0" height="25" width="100%" horizontalGap="0" horizontalAlign="right" verticalAlign="bottom" paddingBottom="5">

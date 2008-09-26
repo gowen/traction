@@ -22,7 +22,7 @@
 -->
 <component:TracComboBox xmlns:component="com.effectiveui.component.*" xmlns:mx="http://www.adobe.com/2006/mxml" 
 	dataProvider="{TracModel.getInstance().resolutions}" selectedIndex="{TracModel.getInstance().resolutions.getItemIndex(data.resolution.toString())}"
-	change="updateTicket()" xmlns:util="com.effectiveui.util.*" dropdownWidth="95">
+	change="updateTicket()" xmlns:util="com.effectiveui.util.*">
 	<mx:Script>
 		<![CDATA[
 			import com.effectiveui.component.TracTicket;

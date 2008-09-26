@@ -26,14 +26,19 @@ package com.effectiveui.command
 	import com.effectiveui.component.TracTicket;
 	import com.effectiveui.event.UpdateTicketEvent;
 	import com.effectiveui.model.TracModel;
+	import com.effectiveui.util.IOUtil;
 	import com.mattism.http.xmlrpc.ConnectionImpl;
 	import com.mattism.http.xmlrpc.util.XMLRPCDataTypes;
+	
+	import flash.events.Event;
 
 	public class UpdateTicketCommand implements Command
 	{
 		protected var model:TracModel = TracModel.getInstance();
 		public function execute(event:CairngormEvent):void
 		{			
+			model.sendingData = true;
+			
 			var ticket:TracTicket = (event as UpdateTicketEvent).ticket;
 			if(ticket.component == model.NO_VALUE){
 				ticket.component = "";
@@ -63,8 +68,14 @@ package com.effectiveui.command
 			var comment:String = " ";
 			conn.addParam(ticket.id, XMLRPCDataTypes.INT);
 			conn.addParam(comment, XMLRPCDataTypes.STRING);
-			conn.addParam(ticket.toObject(), XMLRPCDataTypes.STRUCT);			
+			conn.addParam(ticket.toObject(), XMLRPCDataTypes.STRUCT);
+			conn.addEventListener(Event.COMPLETE, handleCallComplete);			
 			conn.call("ticket.update"); 
+			IOUtil.addTicketToDB(ticket);
+		}
+		
+		protected function handleCallComplete(event:Event):void{
+			model.sendingData = false;
 		}
 		
 	}
