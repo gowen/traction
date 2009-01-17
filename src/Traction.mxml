@@ -180,6 +180,7 @@
 			 * Creates a new ticket on the server and resets the local views.
 			 * */
 			protected function submitNewTicket():void{
+				model.currentTicket.reporter = model.username;
 				new CreateNewTicketEvent(model.currentTicket).dispatch();
 				renewView();
 				clearNewTicketCreator();
