@@ -1,26 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
-	
-	Website: http://github.com/gowen/traction 
+Copyright 2010 Greg Owen, Phil Owen, Jacob Henry
 
-    This file is part of Traction.
+Website: http://github.com/gowen/traction 
 
-    Traction is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    any later version.
+This file is part of Traction.
 
-    Traction is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+Traction is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with Traction.  If not, see <http://www.gnu.org/licenses/>.
+Traction is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Traction.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml" alpha="0"
-	openDuration="0" closeDuration="0" cornerRadius="0" arrowButtonWidth="1"
-	focusIn="this.open()" styleName="gridCombos" rowCount="{this.dataProvider.length}"/>
-	
+<mx:ComboBox xmlns:mx="http://www.adobe.com/2006/mxml"
+			 openDuration="0" closeDuration="0" cornerRadius="0" arrowButtonWidth="1"
+			 focusIn="this.open()" styleName="gridCombos" rowCount="{this.dataProvider.length}">
+	<mx:Script>
+		<![CDATA[						
+			import mx.controls.Button;
+			import mx.controls.TextInput;
+			import mx.core.mx_internal;
+			import mx.skins.Border;
+			
+			use namespace mx_internal;
+			
+			protected var _data:Object;
+			
+			[Bindable]
+			public override function set data(value:Object):void {
+				_data = value;
+			}		
+			public override function get data():Object {
+				return _data;
+			}
+			
+			protected override function createChildren():void {
+				// we don't want any of those silly combo box children (arrow, border)
+				super.createChildren();
+				removeChild(DisplayObject(border));
+				removeChild(downArrowButton);
+			}			
+		]]>
+	</mx:Script>
+</mx:ComboBox>
+

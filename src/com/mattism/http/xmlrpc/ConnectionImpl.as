@@ -103,7 +103,7 @@ package com.mattism.http.xmlrpc
 		
 		protected function doCall():void{
 			var request:URLRequest = new URLRequest();
-			request.contentType = 'text/xml';
+			request.contentType = 'application/xml';			
 			request.data = this._method.getXml();
 			request.method = URLRequestMethod.POST;
 			request.url = this.getUrl();

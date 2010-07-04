@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	Copyright 2010 Greg Owen, Phil Owen, Jacob Henry
 	
 	Website: http://github.com/gowen/traction 
 
@@ -20,7 +20,7 @@
     along with Traction.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="600" width="1300"
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" height="650" width="1300"
 	creationComplete="launchLogin()" visible="false" frameRate="30" closing="if(model.sync)IOUtil.saveTime(model.currentTimeStamp)" 
 	xmlns:control="com.effectiveui.control.*" horizontalCenter="0" verticalCenter="0" 
 	xmlns:component="com.effectiveui.component.*" xmlns:util="com.effectiveui.util.*">
@@ -116,6 +116,11 @@
 				}
 				if(priorityBox.selectedIndex != 0 && priorityBox.selectedItem){
 					if(data.priority.toString() != priorityBox.selectedItem.toString()){
+						return false;
+					}
+				}
+				if(severityBox.selectedIndex != 0 && severityBox.selectedItem){
+					if(data.severity.toString() != severityBox.selectedItem.toString()){
 						return false;
 					}
 				}
@@ -400,6 +405,9 @@
 						<mx:Text text="Priority:"/>
 						<mx:ComboBox id="priorityBox" dataProvider="{model.priorities}" change="model.tickets.refresh()" dataChange="priorityBox.selectedIndex = 0"/>
 						<mx:Spacer height="10"/>
+						<mx:Text text="Severity:"/>
+						<mx:ComboBox id="severityBox" dataProvider="{model.severities}" change="model.tickets.refresh()" dataChange="severityBox.selectedIndex = 0"/>
+						<mx:Spacer height="10"/>
 						<mx:Text text="Type:"/>
 						<mx:ComboBox id="typeBox" dataProvider="{model.types}" change="model.tickets.refresh()" dataChange="typeBox.selectedIndex = 0"/>
 						<mx:Spacer height="10"/>
@@ -440,6 +448,11 @@
 										<mx:Text text="Priority: "/>
 										<mx:ComboBox id="newPriorityBox" dataProvider="{model.priorities}" change="model.currentTicket.priority = newPriorityBox.selectedItem as String" 
 											dataChange="newPriorityBox.selectedIndex = 0"/>
+									</mx:HBox>
+									<mx:HBox height="100%" width="100%">
+										<mx:Text text="Severity: "/>
+										<mx:ComboBox id="newSeverityBox" dataProvider="{model.severities}" change="model.currentTicket.severity = newSeverityBox.selectedItem as String" 
+													 dataChange="newSeverityBox.selectedIndex = 0"/>
 									</mx:HBox>
 									<mx:HBox height="100%" width="100%">
 										<mx:Text text="Component:"/>
@@ -517,6 +530,7 @@
 							<mx:DataGridColumn dataField="resolution" minWidth="60" itemRenderer="com.effectiveui.view.editors.ResolutionEditor" rendererIsEditor="true" />				
 							<mx:DataGridColumn dataField="component" minWidth="55" itemRenderer="com.effectiveui.view.editors.ComponentEditor" rendererIsEditor="true"/>												
 							<mx:DataGridColumn dataField="priority" minWidth="50" itemRenderer="com.effectiveui.view.editors.PriorityEditor" rendererIsEditor="true" />
+							<mx:DataGridColumn dataField="severity" minWidth="50" itemRenderer="com.effectiveui.view.editors.SeverityEditor" rendererIsEditor="true" />
 							<mx:DataGridColumn dataField="keywords" minWidth="80" itemEditor="com.effectiveui.view.editors.KeywordEditor" />			
 							<mx:DataGridColumn dataField="reporter" minWidth="70" itemEditor="com.effectiveui.view.editors.ReporterEditor" />				
 							<mx:DataGridColumn dataField="type" minWidth="80" itemRenderer="com.effectiveui.view.editors.TypeEditor" rendererIsEditor="true" />

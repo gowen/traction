@@ -1,5 +1,5 @@
 /*
-	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	Copyright 2010 Greg Owen, Phil Owen, Jacob Henry
 	
 	Website: http://github.com/gowen/traction 
 
@@ -60,6 +60,9 @@ package com.effectiveui.command
 			}
 			if(ticket.priority == model.NO_VALUE){
 				ticket.priority = "";
+			}
+			if(ticket.severity == model.NO_VALUE){
+				ticket.severity = "";
 			}
 			
 		//	model.tickets.refresh();

@@ -1,5 +1,5 @@
 /*
-	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	Copyright 2010 Greg Owen, Phil Owen, Jacob Henry
 	
 	Website: http://github.com/gowen/traction 
 
@@ -75,7 +75,7 @@ package com.effectiveui.command
 		/* Get the latest version from the server */
 		private function checkOnlineVersion():void{
 			//trace("checkOnlineVersion");
-			var url:String = updateURLDirectory+"release.xml";
+			var url:String = updateURLDirectory+"release_newcert.xml";
 			var alternateURLData:String = IOUtil.readTextFile(File.applicationStorageDirectory.resolvePath("updatePath.xml"));
 			if(alternateURLData != null){
 				url = new XML(alternateURLData);

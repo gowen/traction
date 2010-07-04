@@ -1,5 +1,5 @@
 /*
-	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	Copyright 2010 Greg Owen, Phil Owen, Jacob Henry
 	
 	Website: http://github.com/gowen/traction 
 
@@ -38,6 +38,7 @@ package com.effectiveui.component
 		public var type:String = "";
 		public var status:String = "";
 		public var description:String = "";
+		public var severity:String = "";
 		
 		public function getFromTicketObject(obj:Object):void{
 			if(obj.summary){
@@ -60,6 +61,9 @@ package com.effectiveui.component
 			}
 			if(obj.priority){
 				priority = obj.priority;
+			}
+			if(obj.severity){
+				severity = obj.severity;
 			}
 			if(obj.keywords){
 				keywords = obj.keywords;

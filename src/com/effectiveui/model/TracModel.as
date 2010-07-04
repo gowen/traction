@@ -1,5 +1,5 @@
 /*
-	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	Copyright 2010 Greg Owen, Phil Owen, Jacob Henry
 	
 	Website: http://github.com/gowen/traction 
 
@@ -80,6 +80,7 @@ package com.effectiveui.model
 		public var statuses:ArrayCollection = new ArrayCollection();
 		public var versions:ArrayCollection = new ArrayCollection();
 		public var priorities:ArrayCollection = new ArrayCollection();
+		public var severities:ArrayCollection = new ArrayCollection();
 		public var resolutions:ArrayCollection = new ArrayCollection();
 		public var types:ArrayCollection = new ArrayCollection();
 		public var owners:ArrayCollection = new ArrayCollection();

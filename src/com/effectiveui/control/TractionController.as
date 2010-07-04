@@ -1,5 +1,5 @@
 /*
-	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	Copyright 2010 Greg Owen, Phil Owen, Jacob Henry
 	
 	Website: http://github.com/gowen/traction 
 
@@ -31,6 +31,7 @@ package com.effectiveui.control
 	import com.effectiveui.command.GetPrioritiesCommand;
 	import com.effectiveui.command.GetResolutionsCommand;
 	import com.effectiveui.command.GetScoresCommand;
+	import com.effectiveui.command.GetSeveritiesCommand;
 	import com.effectiveui.command.GetStatusesCommand;
 	import com.effectiveui.command.GetTicketsCommand;
 	import com.effectiveui.command.GetTypesCommand;
@@ -45,6 +46,7 @@ package com.effectiveui.control
 	import com.effectiveui.event.GetPrioritiesEvent;
 	import com.effectiveui.event.GetResolutionsEvent;
 	import com.effectiveui.event.GetScoresEvent;
+	import com.effectiveui.event.GetSeveritiesEvent;
 	import com.effectiveui.event.GetStatusesEvent;
 	import com.effectiveui.event.GetTicketsEvent;
 	import com.effectiveui.event.GetTypesEvent;
@@ -63,6 +65,7 @@ package com.effectiveui.control
 			addCommand(GetMilestonesEvent.GET_MILESTONES, GetMilestonesCommand);
 			addCommand(GetComponentsEvent.GET_COMPONENTS, GetComponentsCommand);
 			addCommand(GetPrioritiesEvent.GET_PRIORITIES, GetPrioritiesCommand);
+			addCommand(GetSeveritiesEvent.GET_SEVERITIES, GetSeveritiesCommand);
 			addCommand(GetResolutionsEvent.GET_RESOLUTIONS, GetResolutionsCommand);
 			addCommand(GetStatusesEvent.GET_STATUSES, GetStatusesCommand);
 			addCommand(GetTicketsEvent.GET_ACTIVE, GetTicketsCommand);

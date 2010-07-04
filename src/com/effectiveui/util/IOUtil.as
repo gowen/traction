@@ -1,5 +1,5 @@
 /*
-	Copyright 2008 Greg Owen, Phil Owen, Jacob Henry
+	Copyright 2010 Greg Owen, Phil Owen, Jacob Henry
 	
 	Website: http://github.com/gowen/traction 
 
@@ -42,8 +42,8 @@ package com.effectiveui.util
 			var model:TracModel = TracModel.getInstance();
 			var stmt:SQLStatement = new SQLStatement();
 			stmt.sqlConnection = model.dbConnection;
-			stmt.text = "INSERT OR REPLACE INTO tickets (id, summary, description, version, milestone, owner, resolution, component, priority, keywords, reporter, type, status) " + 
-					"VALUES (:id, :summary, :description, :version, :milestone, :owner, :resolution, :component, :priority, :keywords, :reporter, :type, :status)";
+			stmt.text = "INSERT OR REPLACE INTO tickets (id, summary, description, version, milestone, owner, resolution, component, priority, severity, keywords, reporter, type, status) " + 
+					"VALUES (:id, :summary, :description, :version, :milestone, :owner, :resolution, :component, :priority, :severity, :keywords, :reporter, :type, :status)";
 			stmt.parameters[':id'] = ticket.id;
 			stmt.parameters[':summary'] = ticket.summary;
 			stmt.parameters[':description'] = ticket.description;
@@ -53,6 +53,7 @@ package com.effectiveui.util
 			stmt.parameters[':resolution'] = ticket.resolution;
 			stmt.parameters[':component'] = ticket.component;
 			stmt.parameters[':priority'] = ticket.priority;
+			stmt.parameters[':severity'] = ticket.severity;
 			stmt.parameters[':keywords'] = ticket.keywords;
 			stmt.parameters[':reporter'] = ticket.reporter;
 			stmt.parameters[':type'] = ticket.type;
@@ -124,6 +125,7 @@ package com.effectiveui.util
 			ticket.resolution = o['resolution'];
 			ticket.component = o['component'];
 			ticket.priority = o['priority'];
+			ticket.severity = o['severity'];
 			ticket.keywords = o['keywords'];
 			ticket.reporter = o['reporter'];
 			ticket.type = o['type'];
